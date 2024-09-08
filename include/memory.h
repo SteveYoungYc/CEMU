@@ -26,7 +26,7 @@ private:
     void HostWrite32(uint8_t *ptr, uint32_t data);
     void HostWrite64(uint8_t *ptr, uint64_t data);
     
-    bool IsValiedPA(paddr_t pa);
+    bool IsValidPA(paddr_t pa);
 
 public:
     Memory();

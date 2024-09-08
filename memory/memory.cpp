@@ -66,14 +66,14 @@ void Memory::HostWrite64(uint8_t *ptr, uint64_t data)
 }
 
 
-bool Memory::IsValiedPA(paddr_t pa)
+bool Memory::IsValidPA(paddr_t pa)
 {
     return (pa >= base) && (pa < (base + size));
 }
 
 uint8_t Memory::PhysicalRead08(paddr_t pa)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -82,7 +82,7 @@ uint8_t Memory::PhysicalRead08(paddr_t pa)
 
 uint16_t Memory::PhysicalRead16(paddr_t pa)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -91,7 +91,7 @@ uint16_t Memory::PhysicalRead16(paddr_t pa)
 
 uint32_t Memory::PhysicalRead32(paddr_t pa)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -100,7 +100,7 @@ uint32_t Memory::PhysicalRead32(paddr_t pa)
 
 uint64_t Memory::PhysicalRead64(paddr_t pa)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -109,7 +109,7 @@ uint64_t Memory::PhysicalRead64(paddr_t pa)
 
 void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -118,7 +118,7 @@ void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 
 void Memory::PhysicalWrite16(paddr_t pa, uint16_t data)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -127,7 +127,7 @@ void Memory::PhysicalWrite16(paddr_t pa, uint16_t data)
 
 void Memory::PhysicalWrite32(paddr_t pa, uint32_t data)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }
@@ -136,7 +136,7 @@ void Memory::PhysicalWrite32(paddr_t pa, uint32_t data)
 
 void Memory::PhysicalWrite64(paddr_t pa, uint64_t data)
 {
-    if (!IsValiedPA(pa))
+    if (!IsValidPA(pa))
     {
         assert(0);
     }

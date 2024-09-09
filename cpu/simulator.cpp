@@ -17,7 +17,7 @@ CEMU_Status Simulator::status;
 
 Simulator::Simulator()
 {
-    decoder = new RISCV32_Decoder();
+    decoder = new RISCV32_Decoder(&status);
     cpu = new RISCV32_CPU(decoder);
 
     memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));

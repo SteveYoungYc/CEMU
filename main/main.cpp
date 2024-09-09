@@ -1,12 +1,9 @@
 #include <monitor.h>
+#include <cpu.h>
 #include <memory.h>
-
-using namespace std;
 
 int main(int argc, char *argv[])
 {
-    /* Initialize the monitor. */
-    Monitor monitor;
-    Memory Memory;
+    cpu.Run(6);
     return 0;
 }

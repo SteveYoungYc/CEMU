@@ -1,5 +1,7 @@
 #include <memory.h>
 
+Memory memory;
+
 Memory::Memory()
 {
     pmem = (uint8_t *)malloc(size);

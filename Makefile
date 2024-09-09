@@ -26,8 +26,11 @@ export TOPDIR
 TARGET := cemu
 
 obj-y += main/
+obj-y += cpu/
 obj-y += memory/
 obj-y += monitor/
+
+obj-y += isa/riscv32/
 
 all : start_recursive_build $(TARGET)
 	@echo $(TARGET) has been built!

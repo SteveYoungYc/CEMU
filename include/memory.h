@@ -12,8 +12,8 @@ class Memory
 {
 private:
     uint8_t *pmem;
-    const uint32_t size = 0x8000000;
-    const uint32_t base = 0x80000000;
+    static const uint32_t size = 0x8000000;
+    static const uint32_t base = 0x80000000;
 
     uint8_t *GuestToHost(paddr_t pa);
     paddr_t HostToGuest(uint8_t *ptr);
@@ -32,6 +32,9 @@ public:
     Memory();
     ~Memory();
 
+    static uint32_t GetBase() { return base; }
+    static uint32_t GetSize() { return size; }
+
     uint8_t PhysicalRead08(paddr_t pa);
     uint16_t PhysicalRead16(paddr_t pa);
     uint32_t PhysicalRead32(paddr_t pa);
@@ -41,5 +44,7 @@ public:
     void PhysicalWrite32(paddr_t pa, uint32_t data);
     void PhysicalWrite64(paddr_t pa, uint64_t data);
 };
+
+extern Memory memory;
 
 #endif

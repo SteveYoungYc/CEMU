@@ -98,6 +98,13 @@ private:
     static CEMU_Status *status;
 
     static const uint32_t opcodeMask = 0b1111111;
+    static const uint32_t calMask    = 0b00000000000000000111000000000000;
+    static const uint32_t loadMask   = 0b00000000000000000111000000000000;
+    static const uint32_t storeMask  = 0b00000000000000000111000000000000;
+    static const uint32_t immMask0   = 0b00000000000000000111000000000000;
+    static const uint32_t immMask1   = 0b11111110000000000111000000000000;
+    static const uint32_t branchMask = 0b00000000000000000111000000000000;
+    static const uint32_t jumpMask   = 0b00000000000000000111000000000000;
 
     static OpcodeEntry opcodeTable[];
     static InstEntry cal[];
@@ -118,26 +125,68 @@ public:
     ~RISCV32_Decoder();
     uint32_t Decode() override;
 
-    static inline void add()
-    {
-        printf("add!\n");
-    }
+    static inline void add() {}
+    static inline void sub() {}
+    static inline void _xor() {}
+    static inline void _or() {}
+    static inline void _and() {}
+    static inline void sll() {}
+    static inline void srl() {}
+    static inline void sra() {}
+    static inline void slt() {}
+    static inline void sltu() {}
+    static inline void mul() {}
+    static inline void mulh() {}
+    static inline void mulsu() {}
+    static inline void mulu() {}
+    static inline void div() {}
+    static inline void divu() {}
+    static inline void rem() {}
+    static inline void remu() {}
 
     static inline void _lui()
     {
         printf("lui!\n");
     }
 
+
+    static inline void lb() {}
+    static inline void lh() {}
     static inline void lw()
     {
         printf("lw!\n");
     }
+    static inline void lbu() {}
+    static inline void lhu() {}
 
+    static inline void sb() {}
+    static inline void sh() {}
     static inline void sw()
     {
         printf("sw!\n");
     }
 
+    static inline void addi() {}
+    static inline void xori() {}
+    static inline void ori() {}
+    static inline void andi() {}
+    static inline void slli() {}
+    static inline void srli() {}
+    static inline void srai() {}
+    static inline void slti() {}
+    static inline void sltiu() {}
+
+    static inline void beq() {}
+    static inline void bne() {}
+    static inline void blt() {}
+    static inline void bge() {}
+    static inline void bltu() {}
+    static inline void bgeu() {}
+
+    static inline void jalr() {}
+
+    static inline void _auipc() {}
+    static inline void _jal() {}
     static inline void trap()
     {
         *status = STOP;

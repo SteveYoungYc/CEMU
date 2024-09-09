@@ -15,7 +15,24 @@ RISCV32_Decoder::~RISCV32_Decoder()
 }
 
 InstEntry RISCV32_Decoder::cal[] = {
-    {0b00000000000000000000000000000000, 0b11111110000000000111000000000000, RISCV32_Decoder::add},
+    {0b00000000000000000000000000000000, calMask, RISCV32_Decoder::add},
+    {0b01000000000000000000000000000000, calMask, RISCV32_Decoder::sub},
+    {0b00000000000000000100000000000000, calMask, RISCV32_Decoder::_xor},
+    {0b00000000000000000110000000000000, calMask, RISCV32_Decoder::_or},
+    {0b00000000000000000111000000000000, calMask, RISCV32_Decoder::_and},
+    {0b00000000000000000001000000000000, calMask, RISCV32_Decoder::sll},
+    {0b00000000000000000101000000000000, calMask, RISCV32_Decoder::srl},
+    {0b01000000000000000101000000000000, calMask, RISCV32_Decoder::sra},
+    {0b00000000000000000010000000000000, calMask, RISCV32_Decoder::slt},
+    {0b00000000000000000011000000000000, calMask, RISCV32_Decoder::sltu},
+    {0b00000010000000000000000000000000, calMask, RISCV32_Decoder::mul},
+    {0b00000010000000000001000000000000, calMask, RISCV32_Decoder::mulh},
+    {0b00000010000000000010000000000000, calMask, RISCV32_Decoder::mulsu},
+    {0b00000010000000000011000000000000, calMask, RISCV32_Decoder::mulu},
+    {0b00000010000000000100000000000000, calMask, RISCV32_Decoder::div},
+    {0b00000010000000000101000000000000, calMask, RISCV32_Decoder::divu},
+    {0b00000010000000000110000000000000, calMask, RISCV32_Decoder::rem},
+    {0b00000010000000000111000000000000, calMask, RISCV32_Decoder::remu},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
@@ -25,32 +42,56 @@ InstEntry RISCV32_Decoder::lui[] = {
 };
 
 InstEntry RISCV32_Decoder::load[] = {
-    {0b00000000000000000010000000000000, 0b00000000000000000111000000000000, RISCV32_Decoder::lw},
+    {0b00000000000000000000000000000000, loadMask, RISCV32_Decoder::lb},
+    {0b00000000000000000001000000000000, loadMask, RISCV32_Decoder::lh},
+    {0b00000000000000000010000000000000, loadMask, RISCV32_Decoder::lw},
+    {0b00000000000000000100000000000000, loadMask, RISCV32_Decoder::lbu},
+    {0b00000000000000000101000000000000, loadMask, RISCV32_Decoder::lhu},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::store[] = {
-    {0b00000000000000000010000000000000, 0b00000000000000000111000000000000, RISCV32_Decoder::sw},
+    {0b00000000000000000000000000000000, storeMask, RISCV32_Decoder::sb},
+    {0b00000000000000000001000000000000, storeMask, RISCV32_Decoder::sh},
+    {0b00000000000000000010000000000000, storeMask, RISCV32_Decoder::sw},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::imm[] = {
+    {0b00000000000000000000000000000000, immMask0, RISCV32_Decoder::addi},
+    {0b00000000000000000100000000000000, immMask0, RISCV32_Decoder::xori},
+    {0b00000000000000000110000000000000, immMask0, RISCV32_Decoder::ori},
+    {0b00000000000000000111000000000000, immMask0, RISCV32_Decoder::andi},
+    {0b00000000000000000001000000000000, immMask1, RISCV32_Decoder::slli},
+    {0b00000000000000000101000000000000, immMask1, RISCV32_Decoder::srli},
+    {0b01000000000000000101000000000000, immMask1, RISCV32_Decoder::srai},
+    {0b00000000000000000010000000000000, immMask0, RISCV32_Decoder::slti},
+    {0b00000000000000000011000000000000, immMask0, RISCV32_Decoder::sltiu},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::branch[] = {
+    {0b00000000000000000000000000000000, branchMask, RISCV32_Decoder::beq},
+    {0b00000000000000000001000000000000, branchMask, RISCV32_Decoder::bne},
+    {0b00000000000000000100000000000000, branchMask, RISCV32_Decoder::blt},
+    {0b00000000000000000101000000000000, branchMask, RISCV32_Decoder::bge},
+    {0b00000000000000000110000000000000, branchMask, RISCV32_Decoder::bltu},
+    {0b00000000000000000111000000000000, branchMask, RISCV32_Decoder::bgeu},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::jump[] = {
+    {0b00000000000000000000000000000000, jumpMask, RISCV32_Decoder::jalr},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::auipc[] = {
+    {0, 0, RISCV32_Decoder::_auipc},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 InstEntry RISCV32_Decoder::jal[] = {
+    {0, 0, RISCV32_Decoder::_jal},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 

@@ -6,14 +6,14 @@
 class Simulator
 {
 private:
+    
     RISCV32_CPU *cpu;
     RISCV32_Decoder *decoder;
 public:
+    static CEMU_Status status;
     Simulator();
     ~Simulator();
     void Run(uint64_t n);
 };
-
-extern Simulator simulator;
 
 #endif

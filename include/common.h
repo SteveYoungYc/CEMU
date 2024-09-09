@@ -8,6 +8,15 @@
 #include <assert.h>
 #include <stdlib.h>
 
+enum CEMU_Status
+{
+    RUNNING,
+    STOP,
+    END,
+    ABORT,
+    QUIT
+};
+
 typedef uint32_t word_t;
 typedef int32_t  sword_t;
 typedef uint32_t vaddr_t;

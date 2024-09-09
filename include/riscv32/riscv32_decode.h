@@ -73,7 +73,7 @@ public:
 
     RISCV32_Decoder();
     ~RISCV32_Decoder();
-    void Decode() override;
+    uint32_t Decode() override;
 };
 
 

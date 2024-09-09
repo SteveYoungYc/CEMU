@@ -16,10 +16,13 @@ void RISCV32_CPU::Run()
 
 void RISCV32_CPU::Decode()
 {
-
+    if(decoder->Decode())
+    {
+        assert(!"Instruction not supported");
+    }
 }
 
 void RISCV32_CPU::Execute()
 {
-
+    decoder->dnpc = decoder->snpc;
 }

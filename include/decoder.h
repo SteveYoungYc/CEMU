@@ -43,7 +43,7 @@ public:
 
     virtual ~Decoder() {};
 
-    virtual void Decode() = 0;
+    virtual uint32_t Decode() = 0;
 };
 
 #endif

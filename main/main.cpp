@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+    Simulator simulator;
     simulator.Run(6);
     return 0;
 }

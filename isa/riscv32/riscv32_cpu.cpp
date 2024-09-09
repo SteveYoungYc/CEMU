@@ -9,7 +9,9 @@ void RISCV32_CPU::Reset()
 
 void RISCV32_CPU::Run()
 {
-
+    decoder->info->inst.val = Fetch(&decoder->snpc);
+    Decode();
+    Execute();
 }
 
 void RISCV32_CPU::Decode()

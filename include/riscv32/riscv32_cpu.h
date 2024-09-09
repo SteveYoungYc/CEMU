@@ -1,22 +1,21 @@
 #ifndef __RISCV32_CPU_H__
 #define __RISCV32_CPU_H__
 
-#include <common.h>
-#include <cpu.h>
-#include <decoder.h>
-
-class RISCV32_DecodeInfo : public IDecodeInfo
-{
-public:
-
-};
+#include <riscv32/riscv32_decode.h>
 
 class RISCV32_CPU : public ICpu
 {
 private:
 
 public:
-    RISCV32_CPU(Decoder *decoder) : ICpu(decoder) {};
+    word_t gpr[32];
+    vaddr_t pc;
+    RISCV32_Decoder *decoder;
+
+    RISCV32_CPU(RISCV32_Decoder *decoder)
+    {
+        this->decoder = decoder;
+    }
 
     void Reset() override;
     void Run() override;

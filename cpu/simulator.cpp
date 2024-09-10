@@ -19,8 +19,6 @@ Simulator::Simulator()
 {
     decoder = new RISCV32_Decoder(&status);
     cpu = new RISCV32_CPU(decoder);
-
-    memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));
     cpu->Reset();
 }
 
@@ -28,6 +26,32 @@ Simulator::~Simulator()
 {
     delete cpu;
     delete decoder;
+}
+
+long Simulator::LoadImg(const char *imgFile)
+{
+    if (imgFile == NULL)
+    {
+        printf("No image is given. Use the default build-in image.");
+        memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));
+        return 4096; // built-in image size
+    }
+
+    this->imgFile = imgFile;
+    FILE *fp = fopen(imgFile, "rb");
+    assert("Can not open");
+
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+
+    printf("The image is %s, size = %ld\n", imgFile, size);
+
+    fseek(fp, 0, SEEK_SET);
+    int ret = fread(memory.GuestToHost(Memory::GetBase()), size, 1, fp);
+    assert(ret == 1);
+
+    fclose(fp);
+    return size;
 }
 
 void Simulator::Run(uint64_t n)

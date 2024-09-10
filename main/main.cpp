@@ -6,6 +6,7 @@
 int main(int argc, char *argv[])
 {
     Simulator simulator;
-    simulator.Run(6);
+    simulator.LoadImg("/home/chen/emu/ics2021/am-kernels/tests/cpu-tests/build/quick-sort-riscv32-nemu.bin");
+    simulator.Run(-1);
     return 0;
 }

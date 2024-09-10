@@ -125,68 +125,68 @@ public:
     ~RISCV32_Decoder();
     uint32_t Decode() override;
 
-    static inline void add() {}
-    static inline void sub() {}
-    static inline void _xor() {}
-    static inline void _or() {}
-    static inline void _and() {}
-    static inline void sll() {}
-    static inline void srl() {}
-    static inline void sra() {}
-    static inline void slt() {}
-    static inline void sltu() {}
-    static inline void mul() {}
-    static inline void mulh() {}
-    static inline void mulsu() {}
-    static inline void mulu() {}
-    static inline void div() {}
-    static inline void divu() {}
-    static inline void rem() {}
-    static inline void remu() {}
+    static inline void add() { printf("add!\n"); }
+    static inline void sub() { printf("sub!\n"); }
+    static inline void _xor() { printf("xor!\n"); }
+    static inline void _or() { printf("or!\n"); }
+    static inline void _and() { printf("and!\n"); }
+    static inline void sll() { printf("sll!\n"); }
+    static inline void srl() { printf("srl!\n"); }
+    static inline void sra() { printf("sra!\n"); }
+    static inline void slt() { printf("slt!\n"); }
+    static inline void sltu() { printf("sltu!\n"); }
+    static inline void mul() { printf("mul!\n"); }
+    static inline void mulh() { printf("mulh!\n"); }
+    static inline void mulsu() { printf("mulsu!\n"); }
+    static inline void mulu() { printf("mulu!\n"); }
+    static inline void div() { printf("div!\n"); }
+    static inline void divu() { printf("divu!\n"); }
+    static inline void rem() { printf("rem!\n"); }
+    static inline void remu() { printf("remu!\n"); }
 
     static inline void _lui()
     {
         printf("lui!\n");
     }
 
-
-    static inline void lb() {}
-    static inline void lh() {}
+    static inline void lb() { printf("lb!\n"); }
+    static inline void lh() { printf("lh!\n"); }
     static inline void lw()
     {
         printf("lw!\n");
     }
-    static inline void lbu() {}
-    static inline void lhu() {}
+    static inline void lbu() { printf("lbu!\n"); }
+    static inline void lhu() { printf("lhu!\n"); }
 
-    static inline void sb() {}
-    static inline void sh() {}
+    static inline void sb() { printf("sb!\n"); }
+    static inline void sh() { printf("sh!\n"); }
     static inline void sw()
     {
         printf("sw!\n");
     }
 
-    static inline void addi() {}
-    static inline void xori() {}
-    static inline void ori() {}
-    static inline void andi() {}
-    static inline void slli() {}
-    static inline void srli() {}
-    static inline void srai() {}
-    static inline void slti() {}
-    static inline void sltiu() {}
+    static inline void addi() { printf("addi!\n"); }
+    static inline void xori() { printf("xori!\n"); }
+    static inline void ori() { printf("ori!\n"); }
+    static inline void andi() { printf("andi!\n"); }
+    static inline void slli() { printf("slli!\n"); }
+    static inline void srli() { printf("srli!\n"); }
+    static inline void srai() { printf("srai!\n"); }
+    static inline void slti() { printf("slti!\n"); }
+    static inline void sltiu() { printf("sltiu!\n"); }
 
-    static inline void beq() {}
-    static inline void bne() {}
-    static inline void blt() {}
-    static inline void bge() {}
-    static inline void bltu() {}
-    static inline void bgeu() {}
+    static inline void beq() { printf("beq!\n"); }
+    static inline void bne() { printf("bne!\n"); }
+    static inline void blt() { printf("blt!\n"); }
+    static inline void bge() { printf("bge!\n"); }
+    static inline void bltu() { printf("bltu!\n"); }
+    static inline void bgeu() { printf("bgeu!\n"); }
 
-    static inline void jalr() {}
+    static inline void jalr() { printf("jalr!\n"); }
 
-    static inline void _auipc() {}
-    static inline void _jal() {}
+    static inline void _auipc() { printf("auipc!\n"); }
+    static inline void _jal() { printf("jal!\n"); }
+
     static inline void trap()
     {
         *status = STOP;

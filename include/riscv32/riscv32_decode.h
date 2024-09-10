@@ -98,7 +98,7 @@ private:
     static CEMU_Status *status;
 
     static const uint32_t opcodeMask = 0b1111111;
-    static const uint32_t calMask    = 0b00000000000000000111000000000000;
+    static const uint32_t calMask    = 0b11111110000000000111000000000000;
     static const uint32_t loadMask   = 0b00000000000000000111000000000000;
     static const uint32_t storeMask  = 0b00000000000000000111000000000000;
     static const uint32_t immMask0   = 0b00000000000000000111000000000000;

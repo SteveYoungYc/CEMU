@@ -5,6 +5,14 @@
 #include <cpu.h>
 #include <decoder.h>
 
+#define concat(x, y)  x##y
+
+#define id_src1 (&src1)
+#define id_src2 (&src2)
+#define id_dest (&dest)
+
+#define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
+
 enum InstKind
 {
     R,
@@ -122,6 +130,13 @@ private:
     static InstEntry auipc[];
     static InstEntry jal[];
     static InstEntry cemu_trap[];
+
+    void decode_R(int width);
+    void decode_I(int width);
+    void decode_S(int width);
+    void decode_B(int width);
+    void decode_U(int width);
+    void decode_J(int width);
 
 public:
     RISCV32_DecodeInfo *info;

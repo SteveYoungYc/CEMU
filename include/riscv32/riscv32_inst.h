@@ -7,31 +7,6 @@
 
 namespace RISCV32_Inst
 {
-#define concat_temp(x, y) x##y
-#define concat(x, y)      concat_temp(x, y)
-
-#define id_src1 (&s->src1)
-#define id_src2 (&s->src2)
-#define id_dest (&s->dest)
-
-inline int check_reg_idx(int idx)
-{
-    assert(idx >= 0 && idx < 32);
-    return idx;
-}
-
-#define gpReg(idx) (simulator.cpu->gpr[check_reg_idx(idx)])
-
-#define def_DHelper(name) void concat(decode_, name)(RISCV32_Decoder * s, int width)
-
-#define def_DopHelper(name) void concat(decode_op_, name)(RISCV32_Decoder * s, Operand * op, word_t val, bool flag)
-
-def_DHelper(R);
-def_DHelper(I);
-def_DHelper(U);
-def_DHelper(J);
-def_DHelper(S);
-def_DHelper(B);
 
 inline void add(RISCV32_Decoder * s)
 {

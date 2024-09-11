@@ -17,6 +17,12 @@ public:
         this->decoder = decoder;
     }
 
+    inline word_t GetReg(uint32_t idx)
+    {
+        assert(idx >= 0 && idx < 32);
+        return gpr[idx];
+    }
+
     void Reset() override;
     void Run() override;
 

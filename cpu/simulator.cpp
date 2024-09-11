@@ -13,11 +13,9 @@ static const uint32_t img [] = {
   0x0000006b,  // nemu_trap
 };
 
-CEMU_Status Simulator::status;
-
 Simulator::Simulator()
 {
-    decoder = new RISCV32_Decoder(&status);
+    decoder = new RISCV32_Decoder();
     cpu = new RISCV32_CPU(decoder);
     cpu->Reset();
 }
@@ -66,3 +64,5 @@ void Simulator::Run(uint64_t n)
         cpu->pc = decoder->dnpc;
     }
 }
+
+Simulator simulator;

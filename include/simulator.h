@@ -6,12 +6,12 @@
 class Simulator
 {
 private:
-    RISCV32_CPU *cpu;
-    RISCV32_Decoder *decoder;
     const char *imgFile;
 
 public:
-    static CEMU_Status status;
+    RISCV32_CPU *cpu;
+    RISCV32_Decoder *decoder;
+    CEMU_Status status;
 
     Simulator();
     ~Simulator();
@@ -19,5 +19,7 @@ public:
     long LoadImg(const char *imgFile);
     void Run(uint64_t n);
 };
+
+extern Simulator simulator;
 
 #endif

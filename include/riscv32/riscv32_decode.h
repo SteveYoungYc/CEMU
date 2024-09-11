@@ -5,12 +5,6 @@
 #include <cpu.h>
 #include <decoder.h>
 
-#define concat(x, y)  x##y
-
-#define id_src1 (&src1)
-#define id_src2 (&src2)
-#define id_dest (&dest)
-
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
 
 enum InstKind
@@ -29,7 +23,7 @@ struct InstEntry
 {
     const uint32_t pattern;
     const uint32_t mask;
-    void (*InstExe)(RISCV32_Decoder * s);
+    void (RISCV32_Decoder::*InstExe)();
 };
 
 struct OpcodeEntry
@@ -137,6 +131,199 @@ private:
     void decode_B(int width);
     void decode_U(int width);
     void decode_J(int width);
+
+    inline void add()
+    {
+        printf("add\n");
+        // RTL::rtl_add(ddest, dsrc1, dsrc2);
+    }
+    inline void sub()
+    {
+        printf("sub\n");
+    }
+    inline void _xor()
+    {
+        printf("xor\n");
+    }
+    inline void _or()
+    {
+        printf("or\n");
+    }
+    inline void _and()
+    {
+        printf("and\n");
+    }
+    inline void sll()
+    {
+        printf("sll\n");
+    }
+    inline void srl()
+    {
+        printf("srl\n");
+    }
+    inline void sra()
+    {
+        printf("sra\n");
+    }
+    inline void slt()
+    {
+        printf("slt\n");
+    }
+    inline void sltu()
+    {
+        printf("sltu\n");
+    }
+    inline void mul()
+    {
+        printf("mul\n");
+    }
+    inline void mulh()
+    {
+        printf("mulh\n");
+    }
+    inline void mulsu()
+    {
+        printf("mulsu\n");
+    }
+    inline void mulu()
+    {
+        printf("mulu\n");
+    }
+    inline void div()
+    {
+        printf("div\n");
+    }
+    inline void divu()
+    {
+        printf("divu\n");
+    }
+    inline void rem()
+    {
+        printf("rem\n");
+    }
+    inline void remu()
+    {
+        printf("remu\n");
+    }
+
+    inline void _lui()
+    {
+        printf("lui\n");
+    }
+
+    inline void lb()
+    {
+        printf("lb\n");
+    }
+    inline void lh()
+    {
+        printf("lh\n");
+    }
+    inline void lw()
+    {
+        printf("lw\n");
+    }
+    inline void lbu()
+    {
+        printf("lbu\n");
+    }
+    inline void lhu()
+    {
+        printf("lhu\n");
+    }
+
+    inline void sb()
+    {
+        printf("sb\n");
+    }
+    inline void sh()
+    {
+        printf("sh\n");
+    }
+    inline void sw()
+    {
+        printf("sw\n");
+    }
+
+    inline void addi()
+    {
+        printf("addi\n");
+    }
+    inline void xori()
+    {
+        printf("xori\n");
+    }
+    inline void ori()
+    {
+        printf("ori\n");
+    }
+    inline void andi()
+    {
+        printf("andi\n");
+    }
+    inline void slli()
+    {
+        printf("slli\n");
+    }
+    inline void srli()
+    {
+        printf("srli\n");
+    }
+    inline void srai()
+    {
+        printf("srai\n");
+    }
+    inline void slti()
+    {
+        printf("slti\n");
+    }
+    inline void sltiu()
+    {
+        printf("sltiu\n");
+    }
+
+    inline void beq()
+    {
+        printf("beq\n");
+    }
+    inline void bne()
+    {
+        printf("bne\n");
+    }
+    inline void blt()
+    {
+        printf("blt\n");
+    }
+    inline void bge()
+    {
+        printf("bge\n");
+    }
+    inline void bltu()
+    {
+        printf("bltu\n");
+    }
+    inline void bgeu()
+    {
+        printf("bgeu\n");
+    }
+
+    inline void jalr()
+    {
+        printf("jalr\n");
+    }
+
+    inline void _auipc()
+    {
+        printf("auipc\n");
+    }
+    inline void _jal()
+    {
+        printf("jal\n");
+    }
+    inline void trap()
+    {
+        printf("CEMU Trap!\n");
+    }
 
 public:
     RISCV32_DecodeInfo *info;

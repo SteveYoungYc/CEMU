@@ -3,6 +3,11 @@
 
 #include <common.h>
 
+
+#define id_src1 (&src1)
+#define id_src2 (&src2)
+#define id_dest (&dest)
+
 typedef union
 {
     rtlreg_t *preg;

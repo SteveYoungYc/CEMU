@@ -8,6 +8,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
+
+#define concat(x, y)  x##y
+
 enum CEMU_Status
 {
     RUNNING,

@@ -9,6 +9,9 @@ class ICpu
 private:
 
 public:
+    const rtlreg_t rzero = 0;
+    rtlreg_t tmp_reg[4];
+    
     virtual ~ICpu() {};
 
     virtual void Reset() = 0;

@@ -4,6 +4,7 @@
 #include <common.h>
 #include <cpu.h>
 #include <decoder.h>
+#include <rtl.h>
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
 

@@ -4,17 +4,21 @@ Memory memory;
 
 Memory::Memory()
 {
-    pmem = (uint8_t *)malloc(size);
-    if (pmem == nullptr)
-    {
-        assert(0);
-    }
 }
 
 Memory::~Memory()
 {
     free(pmem);
     pmem = nullptr;
+}
+
+void Memory::Init()
+{
+    pmem = (uint8_t *)malloc(size);
+    if (pmem == nullptr)
+    {
+        assert(0);
+    }
 }
 
 uint8_t *Memory::GuestToHost(paddr_t pa)

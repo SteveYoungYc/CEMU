@@ -30,6 +30,8 @@ public:
     Memory();
     ~Memory();
 
+    void Init();
+
     static uint32_t GetBase() { return base; }
     static uint32_t GetSize() { return size; }
 

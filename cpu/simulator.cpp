@@ -15,15 +15,19 @@ static const uint32_t img [] = {
 
 Simulator::Simulator()
 {
-    decoder = new RISCV32_Decoder();
-    cpu = new RISCV32_CPU(decoder);
-    cpu->Reset();
 }
 
 Simulator::~Simulator()
 {
     delete cpu;
     delete decoder;
+}
+
+void Simulator::Init()
+{
+    decoder = new RISCV32_Decoder();
+    cpu = new RISCV32_CPU(decoder);
+    cpu->Reset();
 }
 
 long Simulator::LoadImg(const char *imgFile)

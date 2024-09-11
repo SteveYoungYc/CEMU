@@ -16,6 +16,7 @@ public:
     Simulator();
     ~Simulator();
 
+    void Init();
     long LoadImg(const char *imgFile);
     void Run(uint64_t n);
 };

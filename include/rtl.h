@@ -41,7 +41,7 @@ namespace RTL
 #define c_divs_q(a, b) ((sword_t)(a) / (sword_t)(b))
 #define c_divs_r(a, b) ((sword_t)(a) % (sword_t)(b))
 
-#define def_rtl(name, ...) void concat(rtl_, name)(__VA_ARGS__)
+#define def_rtl(name, ...) void concat(op_, name)(__VA_ARGS__)
 
 #define def_rtl_compute_reg(name)                                                           \
     static inline def_rtl(name, rtlreg_t *dest, const rtlreg_t *src1, const rtlreg_t *src2) \
@@ -70,6 +70,14 @@ def_rtl_compute_reg_imm(srl)
 def_rtl_compute_reg_imm(sra)
 def_rtl_compute_reg_imm(slt)
 def_rtl_compute_reg_imm(sltu)
+
+def_rtl_compute_reg(mulu_lo)
+def_rtl_compute_reg(mulu_hi)
+def_rtl_compute_reg(muls_hi)
+def_rtl_compute_reg(divu_q)
+def_rtl_compute_reg(divu_r)
+def_rtl_compute_reg(divs_q)
+def_rtl_compute_reg(divs_r)
 
 // relation operation
 enum {

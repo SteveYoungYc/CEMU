@@ -8,6 +8,14 @@
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
 
+#define def_op(name) void concat(op_, name)()
+
+#define def_compute_op(name)                         \
+    inline def_op(name)                              \
+    {                                                \
+        RTL::concat(op_, name)(ddest, dsrc1, dsrc2); \
+    }
+
 enum InstKind
 {
     R,
@@ -133,195 +141,165 @@ private:
     void decode_U(int width);
     void decode_J(int width);
 
-    inline void add()
-    {
-        printf("add\n");
-        // RTL::rtl_add(ddest, dsrc1, dsrc2);
-    }
-    inline void sub()
-    {
-        printf("sub\n");
-    }
-    inline void _xor()
-    {
-        printf("xor\n");
-    }
-    inline void _or()
-    {
-        printf("or\n");
-    }
-    inline void _and()
-    {
-        printf("and\n");
-    }
-    inline void sll()
-    {
-        printf("sll\n");
-    }
-    inline void srl()
-    {
-        printf("srl\n");
-    }
-    inline void sra()
-    {
-        printf("sra\n");
-    }
-    inline void slt()
-    {
-        printf("slt\n");
-    }
-    inline void sltu()
-    {
-        printf("sltu\n");
-    }
-    inline void mul()
+    def_compute_op(add)
+    def_compute_op(sub)
+    def_compute_op(xor)
+    def_compute_op(or)
+    def_compute_op(and)
+    def_compute_op(sll)
+    def_compute_op(srl)
+    def_compute_op(sra)
+    def_compute_op(slt)
+    def_compute_op(sltu)
+
+    inline void op_mul()
     {
         printf("mul\n");
     }
-    inline void mulh()
+    inline void op_mulh()
     {
         printf("mulh\n");
     }
-    inline void mulsu()
+    inline void op_mulsu()
     {
         printf("mulsu\n");
     }
-    inline void mulu()
+    inline void op_mulu()
     {
         printf("mulu\n");
     }
-    inline void div()
+    inline void op_div()
     {
         printf("div\n");
     }
-    inline void divu()
+    inline void op_divu()
     {
         printf("divu\n");
     }
-    inline void rem()
+    inline void op_rem()
     {
         printf("rem\n");
     }
-    inline void remu()
+    inline void op_remu()
     {
         printf("remu\n");
     }
 
-    inline void _lui()
+    inline void op_lui()
     {
         printf("lui\n");
     }
 
-    inline void lb()
+    inline void op_lb()
     {
         printf("lb\n");
     }
-    inline void lh()
+    inline void op_lh()
     {
         printf("lh\n");
     }
-    inline void lw()
+    inline void op_lw()
     {
         printf("lw\n");
     }
-    inline void lbu()
+    inline void op_lbu()
     {
         printf("lbu\n");
     }
-    inline void lhu()
+    inline void op_lhu()
     {
         printf("lhu\n");
     }
 
-    inline void sb()
+    inline void op_sb()
     {
         printf("sb\n");
     }
-    inline void sh()
+    inline void op_sh()
     {
         printf("sh\n");
     }
-    inline void sw()
+    inline void op_sw()
     {
         printf("sw\n");
     }
 
-    inline void addi()
+    inline void op_addi()
     {
         printf("addi\n");
     }
-    inline void xori()
+    inline void op_xori()
     {
         printf("xori\n");
     }
-    inline void ori()
+    inline void op_ori()
     {
         printf("ori\n");
     }
-    inline void andi()
+    inline void op_andi()
     {
         printf("andi\n");
     }
-    inline void slli()
+    inline void op_slli()
     {
         printf("slli\n");
     }
-    inline void srli()
+    inline void op_srli()
     {
         printf("srli\n");
     }
-    inline void srai()
+    inline void op_srai()
     {
         printf("srai\n");
     }
-    inline void slti()
+    inline void op_slti()
     {
         printf("slti\n");
     }
-    inline void sltiu()
+    inline void op_sltiu()
     {
         printf("sltiu\n");
     }
 
-    inline void beq()
+    inline void op_beq()
     {
         printf("beq\n");
     }
-    inline void bne()
+    inline void op_bne()
     {
         printf("bne\n");
     }
-    inline void blt()
+    inline void op_blt()
     {
         printf("blt\n");
     }
-    inline void bge()
+    inline void op_bge()
     {
         printf("bge\n");
     }
-    inline void bltu()
+    inline void op_bltu()
     {
         printf("bltu\n");
     }
-    inline void bgeu()
+    inline void op_bgeu()
     {
         printf("bgeu\n");
     }
 
-    inline void jalr()
+    inline void op_jalr()
     {
         printf("jalr\n");
     }
 
-    inline void _auipc()
+    inline void op_auipc()
     {
         printf("auipc\n");
     }
-    inline void _jal()
+    inline void op_jal()
     {
         printf("jal\n");
     }
-    inline void trap()
+    inline void op_trap()
     {
         printf("CEMU Trap!\n");
     }

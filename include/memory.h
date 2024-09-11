@@ -42,10 +42,15 @@ public:
     uint16_t PhysicalRead16(paddr_t pa);
     uint32_t PhysicalRead32(paddr_t pa);
     uint64_t PhysicalRead64(paddr_t pa);
+    word_t PhysicalRead(paddr_t pa, uint32_t len);
+    word_t VirtualRead(paddr_t pa, uint32_t len);
+
     void PhysicalWrite08(paddr_t pa, uint8_t data);
     void PhysicalWrite16(paddr_t pa, uint16_t data);
     void PhysicalWrite32(paddr_t pa, uint32_t data);
     void PhysicalWrite64(paddr_t pa, uint64_t data);
+    void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
+    void VirtualWrite(paddr_t pa, uint64_t data, uint32_t len);
 };
 
 extern Memory memory;

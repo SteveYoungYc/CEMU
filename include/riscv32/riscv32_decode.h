@@ -13,7 +13,7 @@
 #define def_compute_op(name)                         \
     inline def_op(name)                              \
     {                                                \
-        RTL::concat(op_, name)(ddest, dsrc1, dsrc2); \
+        RTL::concat(op_, name)(this, ddest, dsrc1, dsrc2); \
     }
 
 enum InstKind
@@ -311,5 +311,7 @@ public:
     ~RISCV32_Decoder();
     uint32_t Decode() override;
 };
+
+extern RISCV32_Decoder riscv32Decoder;
 
 #endif

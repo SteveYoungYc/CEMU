@@ -1,7 +1,5 @@
 #include <memory.h>
 
-Memory memory;
-
 Memory::Memory()
 {
 }
@@ -113,6 +111,26 @@ uint64_t Memory::PhysicalRead64(paddr_t pa)
     return HostRead64(GuestToHost(pa));
 }
 
+word_t Memory::PhysicalRead(paddr_t pa, uint32_t len)
+{
+    switch (len)
+    {
+        case 1: return PhysicalRead08(pa);
+        case 2: return PhysicalRead16(pa);
+        case 4: return PhysicalRead32(pa);
+        case 8: return PhysicalRead64(pa);
+        default:
+            assert(0);
+            return 0;
+    }
+}
+
+word_t Memory::VirtualRead(paddr_t pa, uint32_t len)
+{
+    return PhysicalRead(pa, len);
+}
+
+
 void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 {
     if (!IsValidPA(pa))
@@ -147,4 +165,22 @@ void Memory::PhysicalWrite64(paddr_t pa, uint64_t data)
         assert(0);
     }
     HostWrite64(GuestToHost(pa), data);
+}
+
+void Memory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    switch (len)
+    {
+        case 1: PhysicalWrite08(pa, data);
+        case 2: PhysicalWrite16(pa, data);
+        case 4: PhysicalWrite32(pa, data);
+        case 8: PhysicalWrite64(pa, data);
+        default:
+            assert(0);
+    }
+}
+
+void Memory::VirtualWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    PhysicalWrite(pa, data, len);
 }

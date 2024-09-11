@@ -19,14 +19,12 @@ Simulator::Simulator()
 
 Simulator::~Simulator()
 {
-    delete cpu;
-    delete decoder;
 }
 
 void Simulator::Init()
 {
-    decoder = new RISCV32_Decoder();
-    cpu = new RISCV32_CPU(decoder);
+    decoder = &riscv32Decoder;
+    cpu = &riscv32CPU;
     cpu->Reset();
 }
 
@@ -41,7 +39,10 @@ long Simulator::LoadImg(const char *imgFile)
 
     this->imgFile = imgFile;
     FILE *fp = fopen(imgFile, "rb");
-    assert("Can not open");
+    if (fp == nullptr)
+    {
+        assert(!"No such file.");
+    }
 
     fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
@@ -69,4 +70,3 @@ void Simulator::Run(uint64_t n)
     }
 }
 
-Simulator simulator;

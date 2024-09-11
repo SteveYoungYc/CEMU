@@ -30,4 +30,6 @@ public:
     void Execute() override;
 };
 
+extern RISCV32_CPU riscv32CPU;
+
 #endif

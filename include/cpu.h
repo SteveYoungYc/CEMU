@@ -14,12 +14,14 @@ public:
     
     virtual ~ICpu() {};
 
-    virtual void Reset() = 0;
-    virtual void Run() = 0;
+    virtual void Reset() {}
+    virtual void Run() {}
 
     uint32_t Fetch(vaddr_t *pc);
-    virtual void Decode() = 0;
-    virtual void Execute() = 0;
+    virtual void Decode() {}
+    virtual void Execute() {}
 };
+
+extern ICpu *baseCPU;
 
 #endif

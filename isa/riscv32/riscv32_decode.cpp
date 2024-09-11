@@ -1,5 +1,4 @@
 #include <riscv32/riscv32_decode.h>
-#include <riscv32/riscv32_inst.h>
 #include <simulator.h>
 
 

@@ -189,14 +189,19 @@ uint32_t RISCV32_Decoder::Decode()
                     {
                     case R:
                         decode_R(4);
+                        break;
                     case I:
                         decode_I(4);
+                        break;
                     case S:
                         decode_S(4);
+                        break;
                     case B:
                         decode_B(4);
+                        break;
                     case U:
                         decode_U(4);
+                        break;
                     case J:
                         decode_J(4);
                         break;

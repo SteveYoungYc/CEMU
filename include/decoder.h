@@ -30,6 +30,9 @@ public:
     vaddr_t dnpc; // dynamic next pc
     Operand dest, src1, src2;
 
+    CEMU_Status *status;
+
+    Decoder();
     virtual ~Decoder() {};
 
     virtual uint32_t Decode() = 0;
@@ -104,7 +107,7 @@ public:
 
     inline def_rtl(sm, const rtlreg_t *src1, const rtlreg_t* addr, word_t offset, int len)
     {
-        memory.PhysicalWrite(*addr + offset, len, *src1);
+        memory.PhysicalWrite(*addr + offset, *src1, len);
     }
 
     inline def_rtl(lms, rtlreg_t *dest, const rtlreg_t* addr, word_t offset, int len)
@@ -157,6 +160,23 @@ public:
     {
         bool is_jmp = InterpretRelop(relop, *src1, *src2);
         rtl_j((is_jmp ? target : snpc));
+    }
+
+    def_rtl(hostcall, uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
+            const rtlreg_t *src2, word_t imm)
+    {
+        switch (id)
+        {
+        case HOSTCALL_EXIT:
+            *status = CEMU_Status::END;
+            break;
+        case HOSTCALL_INV:
+            assert("invalid_instr");
+            break;
+        default:
+            assert("Unsupport hostcall ID");
+            break;
+        }
     }
 };
 

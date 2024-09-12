@@ -4,16 +4,21 @@
 #include <common.h>
 #include <cpu.h>
 #include <decoder.h>
-#include <rtl.h>
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
 
 #define def_op(name) void concat(op_, name)()
 
-#define def_compute_op(name)                         \
-    inline def_op(name)                              \
-    {                                                \
+#define def_op_compute_reg(name)                 \
+    inline def_op(name)                          \
+    {                                            \
         concat(rtl_, name)(ddest, dsrc1, dsrc2); \
+    }
+
+#define def_op_compute_imm(name)                        \
+    inline def_op(name##i)                                 \
+    {                                                   \
+        concat(rtl_, name##i)(ddest, dsrc1, id_src2->imm); \
     }
 
 enum InstKind
@@ -141,24 +146,38 @@ private:
     void decode_U(int width);
     void decode_J(int width);
 
-    def_compute_op(add)
-    def_compute_op(sub)
-    def_compute_op(xor)
-    def_compute_op(or)
-    def_compute_op(and)
-    def_compute_op(sll)
-    def_compute_op(srl)
-    def_compute_op(sra)
-    def_compute_op(slt)
-    def_compute_op(sltu)
+    // Compute
+    def_op_compute_reg(add)
+    def_op_compute_reg(sub)
+    def_op_compute_reg(xor)
+    def_op_compute_reg(or)
+    def_op_compute_reg(and)
+    def_op_compute_reg(sll)
+    def_op_compute_reg(srl)
+    def_op_compute_reg(sra)
+    def_op_compute_reg(slt)
+    def_op_compute_reg(sltu)
+    def_op_compute_imm(add)
+    def_op_compute_imm(sub)
+    def_op_compute_imm(xor)
+    def_op_compute_imm(or)
+    def_op_compute_imm(and)
+    def_op_compute_imm(sll)
+    def_op_compute_imm(srl)
+    def_op_compute_imm(sra)
+    def_op_compute_imm(slt)
+    inline void op_sltiu()
+    {
+        rtl_sltui(ddest, dsrc1, id_src2->imm);
+    }
 
     inline void op_mul()
     {
-        printf("mul\n");
+        rtl_mulu_lo(ddest, dsrc1, dsrc2);
     }
     inline void op_mulh()
     {
-        printf("mulh\n");
+        rtl_muls_hi(ddest, dsrc1, dsrc2);
     }
     inline void op_mulsu()
     {
@@ -166,142 +185,117 @@ private:
     }
     inline void op_mulu()
     {
-        printf("mulu\n");
+        rtl_mulu_hi(ddest, dsrc1, dsrc2);
     }
     inline void op_div()
     {
-        printf("div\n");
+        rtl_divs_q(ddest, dsrc1, dsrc2);
     }
     inline void op_divu()
     {
-        printf("divu\n");
+        rtl_divu_q(ddest, dsrc1, dsrc2);
     }
     inline void op_rem()
     {
-        printf("rem\n");
+        rtl_divs_r(ddest, dsrc1, dsrc2);
     }
     inline void op_remu()
     {
-        printf("remu\n");
+        rtl_divu_r(ddest, dsrc1, dsrc2);
     }
 
-    inline void op_lui()
-    {
-        printf("lui\n");
-    }
-
+    // Load
     inline void op_lb()
     {
-        printf("lb\n");
+        rtl_lms(ddest, dsrc1, id_src2->imm, 1);
     }
     inline void op_lh()
     {
-        printf("lh\n");
+        rtl_lms(ddest, dsrc1, id_src2->imm, 2);
     }
     inline void op_lw()
     {
-        printf("lw\n");
+        rtl_lms(ddest, dsrc1, id_src2->imm, 4);
     }
     inline void op_lbu()
     {
-        printf("lbu\n");
+        rtl_lm(ddest, dsrc1, id_src2->imm, 1);
     }
     inline void op_lhu()
     {
-        printf("lhu\n");
+        rtl_lm(ddest, dsrc1, id_src2->imm, 2);
     }
 
+    // Store
     inline void op_sb()
     {
-        printf("sb\n");
+        rtl_sm(ddest, dsrc1, id_src2->imm, 1);
     }
     inline void op_sh()
     {
-        printf("sh\n");
+        rtl_sm(ddest, dsrc1, id_src2->imm, 2);
     }
     inline void op_sw()
     {
-        printf("sw\n");
+        rtl_sm(ddest, dsrc1, id_src2->imm, 4);
     }
 
-    inline void op_addi()
-    {
-        printf("addi\n");
-    }
-    inline void op_xori()
-    {
-        printf("xori\n");
-    }
-    inline void op_ori()
-    {
-        printf("ori\n");
-    }
-    inline void op_andi()
-    {
-        printf("andi\n");
-    }
-    inline void op_slli()
-    {
-        printf("slli\n");
-    }
-    inline void op_srli()
-    {
-        printf("srli\n");
-    }
-    inline void op_srai()
-    {
-        printf("srai\n");
-    }
-    inline void op_slti()
-    {
-        printf("slti\n");
-    }
-    inline void op_sltiu()
-    {
-        printf("sltiu\n");
-    }
-
+    // Control
     inline void op_beq()
     {
-        printf("beq\n");
+        rtl_jrelop(RELOP_EQ, dsrc1, dsrc2, pc + id_dest->imm);
     }
     inline void op_bne()
     {
-        printf("bne\n");
+        rtl_jrelop(RELOP_NE, dsrc1, dsrc2, pc + id_dest->imm);
     }
     inline void op_blt()
     {
-        printf("blt\n");
+        rtl_jrelop(RELOP_LT, dsrc1, dsrc2, pc + id_dest->imm);
     }
     inline void op_bge()
     {
-        printf("bge\n");
+        rtl_jrelop(RELOP_GE, dsrc1, dsrc2, pc + id_dest->imm);
     }
     inline void op_bltu()
     {
-        printf("bltu\n");
+        rtl_jrelop(RELOP_LTU, dsrc1, dsrc2, pc + id_dest->imm);
     }
     inline void op_bgeu()
     {
-        printf("bgeu\n");
+        rtl_jrelop(RELOP_GEU, dsrc1, dsrc2, pc + id_dest->imm);
     }
 
     inline void op_jalr()
     {
-        printf("jalr\n");
+        *ddest = pc + 4;
+        rtl_j(*dsrc1 + id_src2->imm);
     }
 
+    // inline void op_addi()
+    // {
+    //     rtl_addi(dest, rz, imm);
+    // }
+    inline void op_lui()
+    {
+        *ddest = id_src1->imm;
+    }
     inline void op_auipc()
     {
-        printf("auipc\n");
+        *ddest = pc + id_src1->imm;
+        
     }
     inline void op_jal()
     {
-        printf("jal\n");
+        *ddest = pc + 4;
+        rtl_j(pc + id_src1->imm);
     }
+
+    // CEMU trap
     inline void op_trap()
     {
         printf("CEMU Trap!\n");
+        rtl_hostcall(HOSTCALL_EXIT, ddest, dsrc1, dsrc2, 0);
     }
 
 public:

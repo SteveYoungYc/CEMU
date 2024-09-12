@@ -27,13 +27,6 @@ enum {
     RELOP_GEU   = 8 | 0 | 0 | 1,
 };
 
-enum
-{
-    HOSTCALL_EXIT, // handling nemu_trap
-    HOSTCALL_INV,  // invalid opcode
-    HOSTCALL_PIO,  // port I/O
-};
-
 static inline bool InterpretRelop(uint32_t relop, const rtlreg_t src1, const rtlreg_t src2)
 {
     switch (relop)
@@ -119,5 +112,8 @@ static inline bool InterpretRelop(uint32_t relop, const rtlreg_t src1, const rtl
     def_rtl_compute_reg(name)         \
     def_rtl_compute_imm(name)
 
+
+def_rtl(hostcall, uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
+    const rtlreg_t *src2, word_t imm);
 
 #endif

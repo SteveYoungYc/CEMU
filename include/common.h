@@ -20,6 +20,13 @@ enum CEMU_Status
     QUIT
 };
 
+enum
+{
+    HOSTCALL_EXIT, // handling nemu_trap
+    HOSTCALL_INV,  // invalid opcode
+    HOSTCALL_PIO,  // port I/O
+};
+
 typedef uint32_t word_t;
 typedef int32_t  sword_t;
 typedef uint32_t vaddr_t;

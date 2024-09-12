@@ -21,8 +21,15 @@ static def_DopHelper(r)
 {
     bool is_write = flag;
     word_t zero_null = 0;
-    word_t reg = simulator.cpu->GetReg(val);
-    op->preg = (is_write && val == 0) ? &zero_null : &reg;
+    if (is_write && val == 0)
+    {
+        op->preg = &zero_null;
+    }
+    else
+    {
+        assert(val >= 0 && val < 32);
+        op->preg = &riscv32CPU.gpr[val];
+    }
 }
 
 void RISCV32_Decoder::decode_R(int width)
@@ -205,6 +212,7 @@ uint32_t RISCV32_Decoder::Decode()
                         decode_J(4);
                         break;
                     }
+                    dnpc = snpc;
                     (this->*inst->InstExe)();
                     return 0;
                 }

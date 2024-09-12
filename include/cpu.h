@@ -18,7 +18,6 @@ public:
 
     uint32_t Fetch(vaddr_t *pc);
     virtual void Decode() {}
-    virtual void Execute() {}
 };
 
 extern ICpu *baseCPU;

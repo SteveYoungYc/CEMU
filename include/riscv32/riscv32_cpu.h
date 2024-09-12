@@ -17,17 +17,16 @@ public:
         this->decoder = decoder;
     }
 
-    inline word_t GetReg(uint32_t idx)
+    inline word_t *GetReg(uint32_t idx)
     {
         assert(idx >= 0 && idx < 32);
-        return gpr[idx];
+        return gpr;
     }
 
     void Reset() override;
     void Run() override;
 
     void Decode() override;
-    void Execute() override;
 };
 
 extern RISCV32_CPU riscv32CPU;

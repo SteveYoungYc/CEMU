@@ -23,7 +23,7 @@
 
 enum InstKind
 {
-    R,
+    R = 0,
     I,
     S,
     B,
@@ -32,6 +32,8 @@ enum InstKind
 };
 
 class RISCV32_Decoder;
+
+typedef void (RISCV32_Decoder::*DecoderFunc)(int);
 
 struct InstEntry
 {
@@ -138,6 +140,8 @@ private:
     static InstEntry auipc[];
     static InstEntry jal[];
     static InstEntry cemu_trap[];
+
+    static DecoderFunc decoderTable[];
 
     void decode_R(int width);
     void decode_I(int width);

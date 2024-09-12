@@ -77,6 +77,15 @@ void RISCV32_Decoder::decode_B(int width)
     decode_op_i(id_dest, simm, false);
 }
 
+DecoderFunc RISCV32_Decoder::decoderTable[] = {
+    &RISCV32_Decoder::decode_R,
+    &RISCV32_Decoder::decode_I,
+    &RISCV32_Decoder::decode_S,
+    &RISCV32_Decoder::decode_B,
+    &RISCV32_Decoder::decode_U,
+    &RISCV32_Decoder::decode_J,
+};
+
 InstEntry RISCV32_Decoder::cal[] = {
     {0b00000000000000000000000000000000, calMask, &RISCV32_Decoder::op_add},
     {0b01000000000000000000000000000000, calMask, &RISCV32_Decoder::op_sub},
@@ -175,45 +184,25 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b0010111, opcodeMask, InstKind::U, auipc},
     {0b1101111, opcodeMask, InstKind::J, jal},
     {0b1101011, opcodeMask, InstKind::S, cemu_trap},
+    {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), InstKind::S, nullptr}
 };
 
 uint32_t RISCV32_Decoder::DecodeAndExecute()
 {
-    uint32_t opcodeLen = sizeof(opcodeTable) / sizeof(OpcodeEntry);
-    for (uint32_t i = 0; i < opcodeLen; i++)
+    for (OpcodeEntry *opEntry = opcodeTable; opEntry->instPtr != nullptr; opEntry++)
     {
-        uint32_t masked = info->inst.val & opcodeTable[i].mask;
-        if (masked == opcodeTable[i].pattern)
+        uint32_t masked = info->inst.val & opEntry->mask;
+        if (masked == opEntry->pattern)
         {
-            InstEntry *instTable = opcodeTable[i].instPtr;
-            for (InstEntry *inst = instTable; instTable->InstExe != nullptr; inst++)
+            InstEntry *instTable = opEntry->instPtr;
+            for (InstEntry *instEntry = instTable; instEntry->InstExe != nullptr; instEntry++)
             {
-                uint32_t masked = info->inst.val & inst->mask;
-                if (masked == inst->pattern)
+                uint32_t masked = info->inst.val & instEntry->mask;
+                if (masked == instEntry->pattern)
                 {
-                    switch (opcodeTable[i].kind)
-                    {
-                    case R:
-                        decode_R(4);
-                        break;
-                    case I:
-                        decode_I(4);
-                        break;
-                    case S:
-                        decode_S(4);
-                        break;
-                    case B:
-                        decode_B(4);
-                        break;
-                    case U:
-                        decode_U(4);
-                        break;
-                    case J:
-                        decode_J(4);
-                        break;
-                    }
                     dnpc = snpc;
-                    (this->*inst->InstExe)();
+                    (this->*decoderTable[opEntry->kind])(4);
+                    (this->*instEntry->InstExe)();
                     return 0;
                 }
             }

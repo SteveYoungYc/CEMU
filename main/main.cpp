@@ -9,9 +9,14 @@ Memory memory;
 
 int main(int argc, char *argv[])
 {
+    const char *imgFile = nullptr;
+    if (argc == 2)
+    {
+        imgFile = argv[1];
+    }
     memory.Init();
     simulator.Init();
-    simulator.LoadImg("/home/chen/emu/ics2021/am-kernels/tests/cpu-tests/build/quick-sort-riscv32-nemu.bin");
+    simulator.LoadImg(imgFile);
     simulator.Run(-1);
     return 0;
 }

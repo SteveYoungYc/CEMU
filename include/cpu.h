@@ -2,7 +2,6 @@
 #define __CPU_H__
 
 #include <common.h>
-#include <decoder.h>
 
 class ICpu
 {

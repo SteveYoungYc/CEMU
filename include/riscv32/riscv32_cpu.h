@@ -26,7 +26,7 @@ public:
     void Reset() override;
     void Run() override;
 
-    void Decode() override;
+    void DecodeAndExecute() override;
 };
 
 extern RISCV32_CPU riscv32CPU;

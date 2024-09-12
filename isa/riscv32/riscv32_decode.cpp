@@ -177,7 +177,7 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b1101011, opcodeMask, InstKind::S, cemu_trap},
 };
 
-uint32_t RISCV32_Decoder::Decode()
+uint32_t RISCV32_Decoder::DecodeAndExecute()
 {
     uint32_t opcodeLen = sizeof(opcodeTable) / sizeof(OpcodeEntry);
     for (uint32_t i = 0; i < opcodeLen; i++)

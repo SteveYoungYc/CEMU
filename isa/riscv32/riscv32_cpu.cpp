@@ -10,12 +10,12 @@ void RISCV32_CPU::Reset()
 void RISCV32_CPU::Run()
 {
     decoder->info->inst.val = Fetch(&decoder->snpc);
-    Decode();
+    DecodeAndExecute();
 }
 
-void RISCV32_CPU::Decode()
+void RISCV32_CPU::DecodeAndExecute()
 {
-    if(decoder->Decode())
+    if(decoder->DecodeAndExecute())
     {
         assert(!"Instruction not supported");
     }

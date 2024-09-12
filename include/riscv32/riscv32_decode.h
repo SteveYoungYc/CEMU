@@ -271,11 +271,6 @@ private:
         *ddest = pc + 4;
         rtl_j(*dsrc1 + id_src2->imm);
     }
-
-    // inline void op_addi()
-    // {
-    //     rtl_addi(dest, rz, imm);
-    // }
     inline void op_lui()
     {
         *ddest = id_src1->imm;
@@ -283,7 +278,6 @@ private:
     inline void op_auipc()
     {
         *ddest = pc + id_src1->imm;
-        
     }
     inline void op_jal()
     {
@@ -303,7 +297,7 @@ public:
 
     RISCV32_Decoder();
     ~RISCV32_Decoder();
-    uint32_t Decode() override;
+    uint32_t DecodeAndExecute() override;
 };
 
 extern RISCV32_Decoder riscv32Decoder;

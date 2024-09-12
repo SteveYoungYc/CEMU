@@ -15,9 +15,9 @@
         concat(rtl_, name)(ddest, dsrc1, dsrc2); \
     }
 
-#define def_op_compute_imm(name)                        \
+#define def_op_compute_imm(name)                           \
     inline def_op(name##i)                                 \
-    {                                                   \
+    {                                                      \
         concat(rtl_, name##i)(ddest, dsrc1, id_src2->imm); \
     }
 

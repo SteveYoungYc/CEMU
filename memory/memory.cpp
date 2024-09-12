@@ -115,10 +115,10 @@ word_t Memory::PhysicalRead(paddr_t pa, uint32_t len)
 {
     switch (len)
     {
-        case 1: return PhysicalRead08(pa);
-        case 2: return PhysicalRead16(pa);
-        case 4: return PhysicalRead32(pa);
-        case 8: return PhysicalRead64(pa);
+        case 1: return PhysicalRead08(pa); break;
+        case 2: return PhysicalRead16(pa); break;
+        case 4: return PhysicalRead32(pa); break;
+        case 8: return PhysicalRead64(pa); break;
         default:
             assert(0);
             return 0;
@@ -171,10 +171,10 @@ void Memory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
     switch (len)
     {
-        case 1: PhysicalWrite08(pa, data);
-        case 2: PhysicalWrite16(pa, data);
-        case 4: PhysicalWrite32(pa, data);
-        case 8: PhysicalWrite64(pa, data);
+        case 1: PhysicalWrite08(pa, data); break;
+        case 2: PhysicalWrite16(pa, data); break;
+        case 4: PhysicalWrite32(pa, data); break;
+        case 8: PhysicalWrite64(pa, data); break;
         default:
             assert(0);
     }

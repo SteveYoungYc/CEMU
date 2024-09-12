@@ -1,11 +1,13 @@
 #include <simulator.h>
 #include <memory.h>
+#include <sdb.h>
 
 RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
 ICpu *baseCPU = static_cast<ICpu*>(&riscv32CPU);
 Simulator simulator;
 Memory memory;
+Debugger sdb;
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +19,6 @@ int main(int argc, char *argv[])
     memory.Init();
     simulator.Init();
     simulator.LoadImg(imgFile);
-    simulator.Run(-1);
+    sdb.Run();
     return 0;
 }

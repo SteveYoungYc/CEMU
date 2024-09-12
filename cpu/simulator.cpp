@@ -32,7 +32,7 @@ long Simulator::LoadImg(const char *imgFile)
 {
     if (imgFile == NULL)
     {
-        printf("No image is given. Use the default build-in image.");
+        printf("No image is given. Use the default build-in image.\n");
         memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));
         return 4096; // built-in image size
     }

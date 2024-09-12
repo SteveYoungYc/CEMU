@@ -13,6 +13,7 @@ public:
     
     virtual ~ICpu() {};
 
+    virtual void PrintReg() {};
     virtual void Reset() {}
     virtual void Run() {}
 

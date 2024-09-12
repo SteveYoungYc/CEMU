@@ -16,6 +16,8 @@
 #define unlikely(cond) __builtin_expect(cond, 0)
 #endif
 
+#define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
+
 enum CEMU_Status
 {
     RUNNING,

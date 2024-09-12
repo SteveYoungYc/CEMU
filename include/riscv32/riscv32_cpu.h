@@ -6,7 +6,7 @@
 class RISCV32_CPU : public ICpu
 {
 private:
-
+    static const char *regs[];
 public:
     word_t gpr[32];
     vaddr_t pc;
@@ -23,9 +23,10 @@ public:
         return gpr;
     }
 
+    void PrintReg() override;
+
     void Reset() override;
     void Run() override;
-
     void DecodeAndExecute() override;
 };
 

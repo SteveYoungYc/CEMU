@@ -99,7 +99,7 @@ uint32_t Debugger::Command_P(char *args)
     int res = expr.Run(args, &success);
     if (success)
     {
-        printf("%d\n", res);
+        printf("0x%x\n", res);
     }
     return 0;
 }

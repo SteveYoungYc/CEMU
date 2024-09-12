@@ -2,6 +2,7 @@
 #define __SDB_H__
 
 #include <common.h>
+#include <expr.h>
 
 class Debugger;
 
@@ -16,6 +17,8 @@ struct CommamdTable
 class Debugger
 {
 private:
+    Expression expr;
+
     char* ReadLine();
 public:
     static const CommamdTable commamdTable[];
@@ -28,6 +31,8 @@ public:
     uint32_t Command_P(char *args);
     uint32_t Command_W(char *args);
     uint32_t Command_D(char *args);
+    
+    void Init();
     void Run();
 };
 

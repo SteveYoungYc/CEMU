@@ -90,6 +90,17 @@ uint32_t Debugger::Command_X(char *args)
 
 uint32_t Debugger::Command_P(char *args)
 {
+    if (args == NULL)
+    {
+        printf("usage: 'p expression'\n");
+        return 0;
+    }
+    bool success;
+    int res = expr.Run(args, &success);
+    if (success)
+    {
+        printf("%d\n", res);
+    }
     return 0;
 }
 
@@ -150,6 +161,11 @@ char *Debugger::ReadLine()
     }
 
     return line_read;
+}
+
+void Debugger::Init()
+{
+    expr.Init();
 }
 
 void Debugger::Run()

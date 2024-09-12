@@ -1,3 +1,4 @@
+#include <cstring>
 #include <riscv32/riscv32_cpu.h>
 #include <memory.h>
 
@@ -42,4 +43,18 @@ void RISCV32_CPU::PrintReg()
         }
         printf("%d\n", val);
     }
+}
+
+word_t RISCV32_CPU::RegStrToVal(const char *s, bool *success)
+{
+    for (int i = 0; i < 32; i++)
+    {
+        if (strcmp(s, regs[i]) == 0)
+        {
+            *success = true;
+            return gpr[i];
+        }
+    }
+    *success = false;
+    return 0;
 }

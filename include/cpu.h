@@ -8,16 +8,17 @@ class ICpu
 private:
 
 public:
+    vaddr_t pc;
     const rtlreg_t rzero = 0;
     rtlreg_t tmp_reg[4];
     
     virtual ~ICpu() {};
 
+    uint32_t Fetch(vaddr_t *pc);
+    virtual word_t RegStrToVal(const char *s, bool *success) { return 0; };
     virtual void PrintReg() {};
     virtual void Reset() {}
     virtual void Run() {}
-
-    uint32_t Fetch(vaddr_t *pc);
     virtual void DecodeAndExecute() {}
 };
 

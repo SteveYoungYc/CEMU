@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
     }
     memory.Init();
     simulator.Init();
+    sdb.Init();
+
     simulator.LoadImg(imgFile);
     sdb.Run();
     return 0;

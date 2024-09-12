@@ -9,7 +9,6 @@ private:
     static const char *regs[];
 public:
     word_t gpr[32];
-    vaddr_t pc;
     RISCV32_Decoder *decoder;
 
     RISCV32_CPU(RISCV32_Decoder *decoder)
@@ -24,7 +23,7 @@ public:
     }
 
     void PrintReg() override;
-
+    word_t RegStrToVal(const char *s, bool *success) override;
     void Reset() override;
     void Run() override;
     void DecodeAndExecute() override;

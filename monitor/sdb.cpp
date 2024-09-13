@@ -8,7 +8,7 @@
 const CommamdTable Debugger::commamdTable[] = {
     { "help", "Display informations about all supported commands", &Debugger::CommandHelp },
     { "c", "Continue the execution of the program", &Debugger::Command_C },
-    { "q", "Exit NEMU", &Debugger::Command_Q },
+    { "q", "Exit CEMU", &Debugger::Command_Q },
     { "si", "Execute single step", &Debugger::Command_Si },
     { "info", "Print status", &Debugger::CommandInfo },
     { "x", "Scan memory", &Debugger::Command_X },

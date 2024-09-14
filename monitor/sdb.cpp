@@ -44,7 +44,7 @@ uint32_t Debugger::CommandInfo(char *args)
 {
     if (args == NULL)
     {
-        printf("usage: 'info r' or 'info w'\n");
+        InfoPrint("usage: 'info r' or 'info w'\n");
         return 0;
     }
     if (strcmp(args, "r") == 0)
@@ -58,7 +58,7 @@ uint32_t Debugger::Command_X(char *args)
 {
     if (args == NULL)
     {
-        printf("usage: 'x N EXPR'\n");
+        InfoPrint("usage: 'x N EXPR'\n");
         return 0;
     }
     const char *delim = " ";
@@ -70,7 +70,7 @@ uint32_t Debugger::Command_X(char *args)
     {
         if (strncmp(p, "0x", 2) != 0 || p + 2 == NULL || *(p + 2) == '\0')
         {
-            printf("usage: 'x N EXPR'\n");
+            InfoPrint("usage: 'x N EXPR'\n");
             return 0;
         }
         regAddr = strtol(p, NULL, 16);
@@ -79,12 +79,12 @@ uint32_t Debugger::Command_X(char *args)
     {
         if (i > 0 && i % 4 == 0)
         {
-            printf("\n");
+            InfoPrint("\n");
         }
-        printf("[0x%x] 0x%x\t", regAddr, memory.PhysicalRead(regAddr, 1));
+        InfoPrint("[0x%x] 0x%x\t", regAddr, memory.PhysicalRead(regAddr, 1));
         regAddr++;
     }
-    printf("\n");
+    InfoPrint("\n");
     return 0;
 }
 
@@ -92,14 +92,14 @@ uint32_t Debugger::Command_P(char *args)
 {
     if (args == NULL)
     {
-        printf("usage: 'p expression'\n");
+        InfoPrint("usage: 'p expression'\n");
         return 0;
     }
     bool success;
     int res = expr.Run(args, &success);
     if (success)
     {
-        printf("0x%x\n", res);
+        InfoPrint("0x%x\n", res);
     }
     return 0;
 }
@@ -125,7 +125,7 @@ uint32_t Debugger::CommandHelp(char *args)
         /* no argument given */
         for (i = 0; i < NR_CMD; i++)
         {
-            printf("\033[34m%s - %s\033[0m\n", commamdTable[i].name, commamdTable[i].description);
+            InfoPrint("\033[34m%s - %s\033[0m\n", commamdTable[i].name, commamdTable[i].description);
         }
     }
     else
@@ -134,11 +134,11 @@ uint32_t Debugger::CommandHelp(char *args)
         {
             if (strcmp(arg, commamdTable[i].name) == 0)
             {
-                printf("%s - %s\n", commamdTable[i].name, commamdTable[i].description);
+                InfoPrint("%s - %s\n", commamdTable[i].name, commamdTable[i].description);
                 return 0;
             }
         }
-        printf("Unknown command '%s'\n", arg);
+        InfoPrint("Unknown command '%s'\n", arg);
     }
     return 0;
 }
@@ -212,7 +212,7 @@ void Debugger::Run()
 
         if (i == NR_CMD)
         {
-            printf("Unknown command '%s'\n", cmd);
+            InfoPrint("Unknown command '%s'\n", cmd);
         }
     }
 }

@@ -4,6 +4,7 @@
 #include <common.h>
 #include <cpu.h>
 #include <decoder.h>
+#include <log.h>
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
 
@@ -185,7 +186,7 @@ private:
     }
     inline void op_mulsu()
     {
-        printf("mulsu\n");
+        InfoPrint("mulsu\n");
     }
     inline void op_mulu()
     {
@@ -292,7 +293,7 @@ private:
     // CEMU trap
     inline void op_trap()
     {
-        printf("CEMU Trap!\n");
+        InfoPrint("CEMU Trap!\n");
         rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->imm >> 12);
     }
 

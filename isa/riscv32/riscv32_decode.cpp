@@ -206,10 +206,10 @@ uint32_t RISCV32_Decoder::DecodeAndExecute()
                     return 0;
                 }
             }
-            printf("No instrunction found. (0x%x)\n", info->inst.val);
+            InfoPrint("No instrunction found. (0x%x)\n", info->inst.val);
             return 1;
         }
     }
-    printf("No opcode found. (0x%x)\n", info->inst.val);
+    InfoPrint("No opcode found. (0x%x)\n", info->inst.val);
     return 1;
 }

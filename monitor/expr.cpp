@@ -2,6 +2,7 @@
 #include <expr.h>
 #include <memory.h>
 #include <cpu.h>
+#include <log.h>
 
 #define NR_REGEX ARRLEN(Expression::rules)
 
@@ -122,7 +123,7 @@ bool Expression::MakeToken(char *e)
 
         if (i == NR_REGEX)
         {
-            printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+            InfoPrint("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
             return false;
         }
     }
@@ -145,7 +146,7 @@ int Expression::CheckParentheses(int p, int q)
     left++;
     right--;
 
-    // printf("left: %d, right: %d\n", left, right);
+    // InfoPrint("left: %d, right: %d\n", left, right);
     int stack_count = 0;
     for (int i = left; i <= right; i++)
     {
@@ -172,7 +173,7 @@ int Expression::Calculate(int p, int q)
     if (p > q)
     {
         /* Bad expression */
-        printf("[invalid] p: %d, q: %d\n", p, q);
+        InfoPrint("[invalid] p: %d, q: %d\n", p, q);
         return -1;
     }
     else if (p == q)
@@ -197,7 +198,7 @@ int Expression::Calculate(int p, int q)
             {
                 if (strcmp(tokens[p].str, "pc") != 0)
                 {
-                    printf("[invalid] cannot find reg\n");
+                    InfoPrint("[invalid] cannot find reg\n");
                     return -1;
                 }
                 val = baseCPU->pc;
@@ -207,7 +208,7 @@ int Expression::Calculate(int p, int q)
             val = memory.PhysicalRead(strtol(tokens[p].str, NULL, 16), 1);
             break;
         default:
-            printf("[invalid]\n");
+            InfoPrint("[invalid]\n");
             return -1;
         }
         return val;
@@ -217,14 +218,14 @@ int Expression::Calculate(int p, int q)
         /* The expression is surrounded by a matched pair of parentheses.
          * If that is the case, just throw away the parentheses.
          */
-        // printf("p: %d, q: %d is valid\n", p, q);
+        // InfoPrint("p: %d, q: %d is valid\n", p, q);
         return Calculate(p + 1, q - 1);
     }
     else
     {
         if (res == -1)
         {
-            printf("[invalid] parentheses");
+            InfoPrint("[invalid] parentheses");
             return -1;
         }
         word_t op = -1;
@@ -280,22 +281,22 @@ int Expression::Calculate(int p, int q)
                 break;
             default:
             {
-                printf("[invalid] op\n");
+                InfoPrint("[invalid] op\n");
                 return -1;
             }
             }
         }
-        // printf("main op is %c\n", tokens[op].type);
+        // InfoPrint("main op is %c\n", tokens[op].type);
         int val1 = Calculate(p, op - 1);
         if (val1 == -1)
         {
-            printf("[invalid] val1\n");
+            InfoPrint("[invalid] val1\n");
             return -1;
         }
         int val2 = Calculate(op + 1, q);
         if (val2 == -1)
         {
-            printf("[invalid] val2\n");
+            InfoPrint("[invalid] val2\n");
             return -1;
         }
 
@@ -311,7 +312,7 @@ int Expression::Calculate(int p, int q)
         {
             if (val2 == 0)
             {
-                printf("[invalid] divide by 0\n");
+                InfoPrint("[invalid] divide by 0\n");
                 return -1;
             }
             return val1 / val2;

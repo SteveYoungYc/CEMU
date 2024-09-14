@@ -4,7 +4,7 @@
 #include <memory.h>
 #include <simulator.h>
 #include <string.h>
-#include <arg.h>
+#include <log.h>
 
 
 static const uint32_t img [] = {
@@ -34,7 +34,7 @@ long Simulator::LoadImg()
 {
     if (imgFile == NULL)
     {
-        printf("No image is given. Use the default build-in image.\n");
+        InfoPrint("No image is given. Use the default build-in image.\n");
         memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));
         return 4096; // built-in image size
     }
@@ -48,7 +48,7 @@ long Simulator::LoadImg()
     fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
 
-    printf("The image is %s, size = %ld\n", imgFile, size);
+    InfoPrint("The image is %s, size = %ld\n", imgFile, size);
 
     fseek(fp, 0, SEEK_SET);
     int ret = fread(memory.GuestToHost(Memory::GetBase()), size, 1, fp);
@@ -81,10 +81,10 @@ void Simulator::Run(uint64_t n)
     case QUIT:
         if (simStatus.retVal != 0)
         {
-            printf("Fuck! ret=0x%x\n", simStatus.retVal);
+            InfoPrint("Fuck! ret=0x%x\n", simStatus.retVal);
             assert(0);
         }
-        printf("Good!\n");
+        InfoPrint("Good!\n");
         break;
     }
 }

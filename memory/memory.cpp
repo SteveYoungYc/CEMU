@@ -1,4 +1,5 @@
 #include <memory.h>
+#include <log.h>
 
 Memory::Memory()
 {
@@ -80,6 +81,7 @@ void Memory::AddrCheck(paddr_t pa)
     bool valid = (pa >= base) && (pa < (base + size));
     if (unlikely(!valid))
     {
+        InfoPrint("Invalid pa=0x%x\n", pa);
         assert(0);
     }
 }

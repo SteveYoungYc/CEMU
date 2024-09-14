@@ -33,15 +33,7 @@ void RISCV32_CPU::PrintReg()
 {
     for (int i = 0; i < 32; i++)
     {
-        rtlreg_t val = gpr[i];
-        printf("%s\t\t", regs[i]);
-        int len = printf("%x", val);
-        len = 16 - len;
-        for (int i = 0; i < len; i++)
-        {
-            printf(" ");
-        }
-        printf("%d\n", val);
+        InfoPrint("%s\t\t0x%x\n", regs[i], gpr[i]);
     }
 }
 

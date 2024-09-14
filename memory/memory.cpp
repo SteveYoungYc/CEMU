@@ -75,39 +75,36 @@ bool Memory::IsValidPA(paddr_t pa)
     return (pa >= base) && (pa < (base + size));
 }
 
-uint8_t Memory::PhysicalRead08(paddr_t pa)
+void Memory::AddrCheck(paddr_t pa)
 {
-    if (unlikely(!IsValidPA(pa)))
+    bool valid = (pa >= base) && (pa < (base + size));
+    if (unlikely(!valid))
     {
         assert(0);
     }
+}
+
+uint8_t Memory::PhysicalRead08(paddr_t pa)
+{
+    AddrCheck(pa);
     return HostRead08(GuestToHost(pa));
 }
 
 uint16_t Memory::PhysicalRead16(paddr_t pa)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     return HostRead16(GuestToHost(pa));
 }
 
 uint32_t Memory::PhysicalRead32(paddr_t pa)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     return HostRead32(GuestToHost(pa));
 }
 
 uint64_t Memory::PhysicalRead64(paddr_t pa)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     return HostRead64(GuestToHost(pa));
 }
 
@@ -133,37 +130,25 @@ word_t Memory::VirtualRead(paddr_t pa, uint32_t len)
 
 void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     HostWrite08(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite16(paddr_t pa, uint16_t data)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     HostWrite16(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite32(paddr_t pa, uint32_t data)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     HostWrite32(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite64(paddr_t pa, uint64_t data)
 {
-    if (unlikely(!IsValidPA(pa)))
-    {
-        assert(0);
-    }
+    AddrCheck(pa);
     HostWrite64(GuestToHost(pa), data);
 }
 

@@ -25,7 +25,7 @@ uint32_t Debugger::Command_C(char *args)
 
 uint32_t Debugger::Command_Q(char *args)
 {
-    simulator.status = CEMU_Status::QUIT;
+    simulator.simStatus.status = CEMU_Status::QUIT;
     return 1;
 }
 

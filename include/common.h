@@ -27,6 +27,13 @@ enum CEMU_Status
     QUIT
 };
 
+struct SimStatus
+{
+    CEMU_Status status;
+    uint32_t haltPC;
+    int32_t retVal;
+};
+
 enum
 {
     HOSTCALL_EXIT, // handling cemu_trap

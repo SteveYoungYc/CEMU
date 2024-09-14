@@ -11,7 +11,7 @@ private:
 public:
     RISCV32_CPU *cpu;
     RISCV32_Decoder *decoder;
-    CEMU_Status status;
+    SimStatus simStatus;
 
     Simulator();
     ~Simulator();
@@ -20,6 +20,7 @@ public:
     void SetImg(const char *imgFile) { this->imgFile = imgFile; };
     long LoadImg();
     void Run(uint64_t n);
+    void SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal);
 };
 
 extern Simulator simulator;

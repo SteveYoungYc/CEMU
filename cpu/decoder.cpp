@@ -3,5 +3,5 @@
 
 Decoder::Decoder()
 {
-    status = &simulator.status;
+    simStatus = &simulator.simStatus;
 }

@@ -30,7 +30,7 @@ public:
     vaddr_t dnpc; // dynamic next pc
     Operand dest, src1, src2;
 
-    CEMU_Status *status;
+    SimStatus *simStatus;
 
     Decoder();
     virtual ~Decoder() {};
@@ -168,7 +168,9 @@ public:
         switch (id)
         {
         case HOSTCALL_EXIT:
-            *status = CEMU_Status::END;
+            simStatus->status = CEMU_Status::END;
+            simStatus->haltPC = pc;
+            simStatus->retVal = imm;
             break;
         case HOSTCALL_INV:
             assert("invalid_instr");

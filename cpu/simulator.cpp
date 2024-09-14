@@ -64,9 +64,34 @@ void Simulator::Run(uint64_t n)
         decoder->pc = cpu->pc;
         decoder->snpc = cpu->pc;
         cpu->Run();
-        if (status != RUNNING)
-            return;
+        if (simStatus.status != RUNNING)
+            break;
         cpu->pc = decoder->dnpc;
     }
+
+    switch (simStatus.status)
+    {
+    case CEMU_Status::RUNNING:
+        simStatus.status = CEMU_Status::STOP;
+        break;
+    case STOP:
+    case END:
+    case ABORT:
+    case QUIT:
+        if (simStatus.retVal != 0)
+        {
+            printf("Fuck! ret=0x%x\n", simStatus.retVal);
+            assert(0);
+        }
+        printf("Good!\n");
+        break;
+    }
+}
+
+void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
+{
+    simStatus.status = status;
+    simStatus.haltPC = haltPC;
+    simStatus.retVal = retVal;
 }
 

@@ -293,7 +293,7 @@ private:
     inline void op_trap()
     {
         printf("CEMU Trap!\n");
-        rtl_hostcall(HOSTCALL_EXIT, ddest, dsrc1, dsrc2, 0);
+        rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->imm >> 12);
     }
 
 public:

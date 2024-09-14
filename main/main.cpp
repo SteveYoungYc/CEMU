@@ -18,6 +18,7 @@ static int ParseArgs(int argc, char *argv[])
         {"diff", optional_argument, NULL, 'd'},
         {"port", optional_argument, NULL, 'p'},
         {"help", optional_argument, NULL, 'h'},
+        {"itrace", optional_argument, NULL, 'I'},
         {0, 0, NULL, 0},
     };
     int o;
@@ -37,6 +38,9 @@ static int ParseArgs(int argc, char *argv[])
             break;
         case 'd':
             // diff_so_file = optarg;
+            break;
+        case 'I':
+            printf("itrace enabled\n");
             break;
         case 1:
             simulator.SetImg(optarg);

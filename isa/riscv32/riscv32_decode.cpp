@@ -183,7 +183,7 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b1100111, opcodeMask, InstKind::I, jump},
     {0b0010111, opcodeMask, InstKind::U, auipc},
     {0b1101111, opcodeMask, InstKind::J, jal},
-    {0b1101011, opcodeMask, InstKind::S, cemu_trap},
+    {0b1101011, opcodeMask, InstKind::U, cemu_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), InstKind::S, nullptr}
 };
 

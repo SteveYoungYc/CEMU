@@ -39,7 +39,7 @@ public:
     uint32_t Command_W(char *args);
     uint32_t Command_D(char *args);
     
-    void SetMode(Mode mode) { this->mode = mode; };
+    void SetMode(Mode mode) { this->mode = mode; }
     void Init();
     void Run();
 };

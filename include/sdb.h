@@ -3,6 +3,7 @@
 
 #include <common.h>
 #include <expr.h>
+#include <arg.h>
 
 class Debugger;
 
@@ -38,8 +39,7 @@ public:
     uint32_t Command_P(char *args);
     uint32_t Command_W(char *args);
     uint32_t Command_D(char *args);
-    
-    void SetMode(Mode mode) { this->mode = mode; }
+
     void Init();
     void Run();
 };

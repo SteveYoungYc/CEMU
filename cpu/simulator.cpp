@@ -4,6 +4,7 @@
 #include <memory.h>
 #include <simulator.h>
 #include <string.h>
+#include <arg.h>
 
 
 static const uint32_t img [] = {
@@ -26,7 +27,7 @@ void Simulator::Init()
     decoder = &riscv32Decoder;
     cpu = &riscv32CPU;
     cpu->Reset();
-    imgFile = nullptr;
+    imgFile = args.imgFile;
 }
 
 long Simulator::LoadImg()

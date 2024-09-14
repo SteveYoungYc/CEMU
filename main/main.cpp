@@ -2,6 +2,7 @@
 #include <memory.h>
 #include <sdb.h>
 #include <simulator.h>
+#include <log.h>
 
 RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
@@ -10,10 +11,12 @@ Simulator simulator;
 Memory memory;
 Debugger sdb;
 Args args;
+Logger cemuLog;
 
 int main(int argc, char *argv[])
 {
     args.ParseArgs(argc, argv);
+    cemuLog.Init();
     memory.Init();
     simulator.Init();
     sdb.Init();

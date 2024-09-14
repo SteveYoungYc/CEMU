@@ -6,6 +6,11 @@
 
 class Debugger;
 
+enum Mode {
+    Batch,
+    Debug
+};
+
 struct CommamdTable
 {
     const char *name;
@@ -17,9 +22,11 @@ struct CommamdTable
 class Debugger
 {
 private:
+    Mode mode;
     Expression expr;
 
     char* ReadLine();
+
 public:
     static const CommamdTable commamdTable[];
     uint32_t CommandHelp(char *args);
@@ -32,6 +39,7 @@ public:
     uint32_t Command_W(char *args);
     uint32_t Command_D(char *args);
     
+    void SetMode(Mode mode) { this->mode = mode; };
     void Init();
     void Run();
 };

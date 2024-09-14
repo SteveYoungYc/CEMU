@@ -165,11 +165,18 @@ char *Debugger::ReadLine()
 
 void Debugger::Init()
 {
+    mode = Mode::Debug;
     expr.Init();
 }
 
 void Debugger::Run()
 {
+    if (mode == Mode::Batch)
+    {
+        simulator.Run(-1);
+        return;
+    }
+    
     for (char *str; (str = ReadLine()) != NULL;)
     {
         char *str_end = str + strlen(str);

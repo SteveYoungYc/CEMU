@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the directory containing the .bin files
-directory="/home/chen/emu/ics2021/am-kernels/tests/cpu-tests/build"
+directory="/home/chen/emu/am/am-kernels/tests/cpu-tests/build"
 
 # Check if the directory exists
 if [ ! -d "$directory" ]; then
@@ -16,7 +16,7 @@ for file in "$directory"/*.bin; do
         echo "Executing cemu with $file"
         
         # Run the cemu command and capture its output
-        output=$(./cemu "$file")
+        output=$(./cemu "-b" "$file")
         
         # Check if the output contains "CEMU Trap!"
         if [[ "$output" == *"CEMU Trap!"* ]]; then

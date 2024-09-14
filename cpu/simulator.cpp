@@ -26,9 +26,10 @@ void Simulator::Init()
     decoder = &riscv32Decoder;
     cpu = &riscv32CPU;
     cpu->Reset();
+    imgFile = nullptr;
 }
 
-long Simulator::LoadImg(const char *imgFile)
+long Simulator::LoadImg()
 {
     if (imgFile == NULL)
     {
@@ -37,7 +38,6 @@ long Simulator::LoadImg(const char *imgFile)
         return 4096; // built-in image size
     }
 
-    this->imgFile = imgFile;
     FILE *fp = fopen(imgFile, "rb");
     if (fp == nullptr)
     {

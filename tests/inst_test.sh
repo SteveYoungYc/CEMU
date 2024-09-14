@@ -19,7 +19,7 @@ for file in "$directory"/*.bin; do
         echo "Executing cemu with $file"
         
         # Run the cemu command and capture its output
-        output=$(./cemu "-b" "$file")
+        output=$(./cemu "-b" "--img=$file")
         
         # Check if the output contains "CEMU Trap!"
         if [[ "$output" == *"CEMU Trap!"* ]]; then

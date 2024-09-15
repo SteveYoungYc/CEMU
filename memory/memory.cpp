@@ -7,8 +7,11 @@ Memory::Memory()
 
 Memory::~Memory()
 {
-    free(pmem);
-    pmem = nullptr;
+    if (pmem != nullptr)
+    {
+        free(pmem);
+        pmem = nullptr;
+    }
 }
 
 void Memory::Init()

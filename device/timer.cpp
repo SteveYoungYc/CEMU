@@ -20,6 +20,7 @@ uint64_t Timer::GetTime()
 
 void Timer::Init()
 {
+    region = ioMem.IOMap(this, "Timer", ioMem.IOBase + TIMER_OFFSET, 8);
     region->space = ioMem.GetBasePtr() + TIMER_OFFSET;
 }
 

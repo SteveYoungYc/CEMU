@@ -9,14 +9,13 @@ void Serial::PutChar(char c)
 
 void Serial::Init()
 {
-    region = memory.IOMap(this, "Serial", memory.IOBase + SERIAL_OFFSET, 8);
-    region->space = memory.pio + SERIAL_OFFSET;
+    region = ioMem.IOMap(this, "Serial", ioMem.IOBase + SERIAL_OFFSET, 8);
+    region->space = ioMem.GetBasePtr() + SERIAL_OFFSET;
 }
 
 void Serial::Callback(uint32_t ioOffset, int len, bool is_write)
 {
     uint32_t offset = ioOffset - SERIAL_OFFSET;
-    // InfoPrint("Offset: 0x%x\n", offset);
     assert(len == 1);
     switch (offset)
     {

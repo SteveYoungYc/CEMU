@@ -102,17 +102,17 @@ public:
 
     inline def_rtl(lm, rtlreg_t *dest, const rtlreg_t* addr, word_t offset, int len)
     {
-        *dest = memory.PhysicalRead(*addr + offset, len);
+        *dest = PhysicalRead(*addr + offset, len);
     }
 
     inline def_rtl(sm, const rtlreg_t *src1, const rtlreg_t* addr, word_t offset, int len)
     {
-        memory.PhysicalWrite(*addr + offset, *src1, len);
+        PhysicalWrite(*addr + offset, *src1, len);
     }
 
     inline def_rtl(lms, rtlreg_t *dest, const rtlreg_t* addr, word_t offset, int len)
     {
-        word_t val = memory.PhysicalRead(*addr + offset, len);
+        word_t val = PhysicalRead(*addr + offset, len);
         switch (len)
         {
             case 4: *dest = (sword_t)(int32_t)val; return;

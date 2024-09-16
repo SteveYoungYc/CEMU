@@ -11,7 +11,7 @@ const char *RISCV32_CPU::regs[] = {
 
 void RISCV32_CPU::Reset()
 {
-    pc = Memory::base;
+    pc = Memory::memBase;
     gpr[0] = 0;
 }
 

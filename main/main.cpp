@@ -9,7 +9,8 @@ RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
 ICpu *baseCPU = static_cast<ICpu*>(&riscv32CPU);
 Simulator simulator;
-Memory memory;
+NormalMemory memory;
+IOMemory ioMem;
 Debugger sdb;
 Args args;
 Logger cemuLog;
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     args.ParseArgs(argc, argv);
     cemuLog.Init();
     memory.Init();
+    ioMem.Init();
     simulator.Init();
     sdb.Init();
     serial.Init();

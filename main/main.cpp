@@ -4,6 +4,7 @@
 #include <simulator.h>
 #include <log.h>
 #include <device/serial.h>
+#include <device/timer.h>
 
 RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
@@ -16,6 +17,7 @@ Args args;
 Logger cemuLog;
 
 Serial serial;
+Timer timer;
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +28,7 @@ int main(int argc, char *argv[])
     simulator.Init();
     sdb.Init();
     serial.Init();
+    timer.Init();
 
     simulator.LoadImg();
     sdb.Run();

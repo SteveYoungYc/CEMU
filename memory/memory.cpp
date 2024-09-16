@@ -194,8 +194,9 @@ void IOMemory::Init()
 word_t IOMemory::PhysicalRead(paddr_t pa, uint32_t len)
 {
     MemRegion *region = ioMap.FindMap(pa);
+    assert(region != nullptr);
     region->device->Callback(pa - IOBase, len, false);
-    return Memory::PhysicalRead(pa, len);;
+    return Memory::PhysicalRead(pa, len);
 }
 
 

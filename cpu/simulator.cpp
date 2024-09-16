@@ -35,7 +35,7 @@ long Simulator::LoadImg()
     if (imgFile == NULL)
     {
         InfoPrint("No image is given. Use the default build-in image.\n");
-        memcpy(memory.GuestToHost(Memory::GetBase()), img, sizeof(img));
+        memcpy(memory.GuestToHost(Memory::base), img, sizeof(img));
         return 4096; // built-in image size
     }
 
@@ -51,7 +51,7 @@ long Simulator::LoadImg()
     InfoPrint("The image is %s, size = %ld\n", imgFile, size);
 
     fseek(fp, 0, SEEK_SET);
-    int ret = fread(memory.GuestToHost(Memory::GetBase()), size, 1, fp);
+    int ret = fread(memory.GuestToHost(Memory::base), size, 1, fp);
     assert(ret == 1);
 
     fclose(fp);

@@ -29,6 +29,7 @@ obj-y += main/
 obj-y += cpu/
 obj-y += memory/
 obj-y += monitor/
+obj-y += device/
 
 obj-y += isa/riscv32/
 

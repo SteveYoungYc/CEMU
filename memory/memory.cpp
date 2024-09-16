@@ -1,5 +1,6 @@
 #include <memory.h>
 #include <log.h>
+#include <device.h>
 
 Memory::Memory()
 {
@@ -17,7 +18,8 @@ Memory::~Memory()
 void Memory::Init()
 {
     pmem = (uint8_t *)malloc(size);
-    if (pmem == nullptr)
+    pio = (uint8_t *)malloc(IOSize);
+    if (pmem == nullptr || pio == nullptr)
     {
         assert(0);
     }
@@ -31,6 +33,16 @@ uint8_t *Memory::GuestToHost(paddr_t pa)
 paddr_t Memory::HostToGuest(uint8_t *ptr)
 {
     return base + (ptr - pmem);
+}
+
+uint8_t *Memory::IOGuestToHost(paddr_t pa)
+{
+    return pio + (pa - IOBase);
+}
+
+paddr_t Memory::IOHostToGuest(uint8_t *ptr)
+{
+    return IOBase + (pio - pmem);
 }
 
 uint8_t Memory::HostRead08(uint8_t *ptr)
@@ -79,6 +91,16 @@ bool Memory::IsValidPA(paddr_t pa)
     return (pa >= base) && (pa < (base + size));
 }
 
+bool Memory::IsNormalMemPA(paddr_t pa)
+{
+    return (pa >= base) && (pa < (base + size));
+}
+
+bool Memory::IsIO_PA(paddr_t pa)
+{
+    return (pa >= IOBase) && (pa < (IOBase + IOSize));
+}
+
 void Memory::AddrCheck(paddr_t pa)
 {
     bool valid = (pa >= base) && (pa < (base + size));
@@ -91,25 +113,25 @@ void Memory::AddrCheck(paddr_t pa)
 
 uint8_t Memory::PhysicalRead08(paddr_t pa)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     return HostRead08(GuestToHost(pa));
 }
 
 uint16_t Memory::PhysicalRead16(paddr_t pa)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     return HostRead16(GuestToHost(pa));
 }
 
 uint32_t Memory::PhysicalRead32(paddr_t pa)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     return HostRead32(GuestToHost(pa));
 }
 
 uint64_t Memory::PhysicalRead64(paddr_t pa)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     return HostRead64(GuestToHost(pa));
 }
 
@@ -135,42 +157,69 @@ word_t Memory::VirtualRead(paddr_t pa, uint32_t len)
 
 void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     HostWrite08(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite16(paddr_t pa, uint16_t data)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     HostWrite16(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite32(paddr_t pa, uint32_t data)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     HostWrite32(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite64(paddr_t pa, uint64_t data)
 {
-    AddrCheck(pa);
+    // AddrCheck(pa);
     HostWrite64(GuestToHost(pa), data);
 }
 
 void Memory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
-    switch (len)
+    if (IsNormalMemPA(pa))
     {
-        case 1: PhysicalWrite08(pa, data); break;
-        case 2: PhysicalWrite16(pa, data); break;
-        case 4: PhysicalWrite32(pa, data); break;
-        case 8: PhysicalWrite64(pa, data); break;
-        default:
-            assert(0);
+        switch (len)
+        {
+            case 1: PhysicalWrite08(pa, data); break;
+            case 2: PhysicalWrite16(pa, data); break;
+            case 4: PhysicalWrite32(pa, data); break;
+            case 8: PhysicalWrite64(pa, data); break;
+            default:
+                assert(0);
+        }
+        return;
     }
+    if (IsIO_PA(pa))
+    {
+        switch (len)
+        {
+            case 1: HostWrite08(IOGuestToHost(pa), data); break;
+            default:
+                assert(0);
+        }
+        IOWrite(pa, data, len);
+        return;
+    }
+    assert(0);
+}
+
+void Memory::IOWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    MemRegion *region = ioMap.FindMap(pa);
+    region->device->Callback(pa - IOBase, len, true);
 }
 
 void Memory::VirtualWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
     PhysicalWrite(pa, data, len);
+}
+
+MemRegion *Memory::IOMap(Device *device, const char *name, paddr_t pa, uint32_t len)
+{
+    return ioMap.AddMap(device, name, pa, pa + len);
 }

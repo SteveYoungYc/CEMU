@@ -2,6 +2,7 @@
 #define __MEMORY_H__
 
 #include <common.h>
+#include <map.h>
 
 /*
 Host: CEMU process virtual address space
@@ -12,9 +13,7 @@ class Memory
 {
 private:
     uint8_t *pmem;
-    static const uint32_t size = 0x8000000;
-    static const uint32_t base = 0x80000000;
-
+    
     uint8_t HostRead08(uint8_t *ptr);
     uint16_t HostRead16(uint8_t *ptr);
     uint32_t HostRead32(uint8_t *ptr);
@@ -25,19 +24,27 @@ private:
     void HostWrite64(uint8_t *ptr, uint64_t data);
     
     bool IsValidPA(paddr_t pa);
+    bool IsNormalMemPA(paddr_t pa);
+    bool IsIO_PA(paddr_t pa);
     void AddrCheck(paddr_t pa);
 
 public:
+    static const uint32_t size = 0x8000000;
+    static const uint32_t base = 0x80000000;
+    static const uint32_t IOSize = 2 * 1024 * 1024;
+    static const uint32_t IOBase = 0xa0000000;
+    uint8_t *pio;
+    MemMap ioMap;
+
     Memory();
     ~Memory();
 
     void Init();
 
-    static uint32_t GetBase() { return base; }
-    static uint32_t GetSize() { return size; }
-
     uint8_t *GuestToHost(paddr_t pa);
     paddr_t HostToGuest(uint8_t *ptr);
+    uint8_t *IOGuestToHost(paddr_t pa);
+    paddr_t IOHostToGuest(uint8_t *ptr);
 
     uint8_t PhysicalRead08(paddr_t pa);
     uint16_t PhysicalRead16(paddr_t pa);
@@ -51,7 +58,10 @@ public:
     void PhysicalWrite32(paddr_t pa, uint32_t data);
     void PhysicalWrite64(paddr_t pa, uint64_t data);
     void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
+    void IOWrite(paddr_t pa, uint64_t data, uint32_t len);
     void VirtualWrite(paddr_t pa, uint64_t data, uint32_t len);
+
+    MemRegion *IOMap(Device *device, const char *name, paddr_t pa, uint32_t len);
 };
 
 extern Memory memory;

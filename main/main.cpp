@@ -3,6 +3,7 @@
 #include <sdb.h>
 #include <simulator.h>
 #include <log.h>
+#include <device/serial.h>
 
 RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
@@ -13,6 +14,8 @@ Debugger sdb;
 Args args;
 Logger cemuLog;
 
+Serial serial;
+
 int main(int argc, char *argv[])
 {
     args.ParseArgs(argc, argv);
@@ -20,6 +23,7 @@ int main(int argc, char *argv[])
     memory.Init();
     simulator.Init();
     sdb.Init();
+    serial.Init();
 
     simulator.LoadImg();
     sdb.Run();

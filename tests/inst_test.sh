@@ -22,7 +22,7 @@ for file in "$directory"/*.bin; do
         output=$(./cemu "-b" "--img=$file")
         
         # Check if the output contains "CEMU Trap!"
-        if [[ "$output" == *"CEMU Trap!"* ]]; then
+        if [[ "$output" == *"Good!"* ]]; then
             echo "Test with $file: PASS"
         else
             echo -e "\e[31mTest with $file: FAIL\e[0m"

@@ -3,8 +3,7 @@
 #include <sdb.h>
 #include <simulator.h>
 #include <log.h>
-#include <device/serial.h>
-#include <device/timer.h>
+#include <device/dev_mgr.h>
 
 RISCV32_Decoder riscv32Decoder;
 RISCV32_CPU riscv32CPU(&riscv32Decoder);
@@ -15,9 +14,7 @@ IOMemory ioMem;
 Debugger sdb;
 Args args;
 Logger cemuLog;
-
-Serial serial;
-Timer timer;
+DeviceManager devManager;
 
 int main(int argc, char *argv[])
 {
@@ -27,8 +24,7 @@ int main(int argc, char *argv[])
     ioMem.Init();
     simulator.Init();
     sdb.Init();
-    serial.Init();
-    timer.Init();
+    devManager.Init();
 
     simulator.LoadImg();
     sdb.Run();

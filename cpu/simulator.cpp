@@ -5,7 +5,7 @@
 #include <simulator.h>
 #include <string.h>
 #include <log.h>
-
+#include <device/dev_mgr.h>
 
 static const uint32_t img [] = {
     0x800002b7,  // lui t0,0x80000
@@ -68,6 +68,7 @@ void Simulator::Run(uint64_t n)
         if (simStatus.status != RUNNING)
             break;
         cpu->pc = decoder->dnpc;
+        devManager.Update();
     }
 
     switch (simStatus.status)

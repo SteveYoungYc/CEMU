@@ -2,22 +2,6 @@
 #include <device/timer.h>
 #include <memory.h>
 
-uint64_t Timer::GetTimeInternal()
-{
-    struct timespec now;
-    clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
-    uint64_t us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
-    return us;
-}
-
-uint64_t Timer::GetTime()
-{
-    if (bootTime == 0)
-        bootTime = GetTimeInternal();
-    uint64_t now = GetTimeInternal();
-    return now - bootTime;
-}
-
 void Timer::Init()
 {
     region = ioMem.IOMap(this, "Timer", ioMem.IOBase + TIMER_OFFSET, 8);

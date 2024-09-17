@@ -16,7 +16,7 @@ export STRIP OBJCOPY OBJDUMP
 CFLAGS := -Wall -g
 CFLAGS += -I $(shell pwd)/include
 
-LDFLAGS := -lreadline
+LDFLAGS := -lreadline -lSDL2
 
 export CFLAGS LDFLAGS
 
@@ -30,6 +30,7 @@ obj-y += cpu/
 obj-y += memory/
 obj-y += monitor/
 obj-y += device/
+obj-y += utils/
 
 obj-y += isa/riscv32/
 

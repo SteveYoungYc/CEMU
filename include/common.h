@@ -18,6 +18,8 @@
 
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 
+#define MAP(c, f) c(f)
+
 enum CEMU_Status
 {
     RUNNING,
@@ -48,5 +50,7 @@ typedef uint32_t paddr_t;
 typedef uint16_t ioaddr_t;
 
 typedef word_t rtlreg_t;
+
+extern uint64_t GetTime();
 
 #endif

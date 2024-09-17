@@ -7,11 +7,6 @@
 
 class Timer : public Device
 {
-private:
-    uint64_t bootTime = 0;
-    uint64_t GetTime();
-    uint64_t GetTimeInternal();
-
 public:
     void Init() override;
     void Callback(uint32_t, int, bool) override;

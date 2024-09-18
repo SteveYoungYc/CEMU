@@ -61,8 +61,11 @@ void send_key(uint8_t scancode, bool is_keydown)
 
 void KeyBoard::Init()
 {
-    region = ioMem.IOMap(this, "KeyBoard", ioMem.IOBase + KEYBAORD_OFFSET, 4);
+    MemRegion *region = ioMem.IOMap(this, "KeyBoard", ioMem.IOBase + KEYBAORD_OFFSET, 4);
     region->space = ioMem.GetBasePtr() + KEYBAORD_OFFSET;
+    regions.emplace_back(region);
+    callbacks.emplace_back(static_cast<CallbackFunc>(&KeyBoard::Callback));
+
     *(uint32_t *)region->space = _KEY_NONE;
     init_keymap();
 }
@@ -72,7 +75,7 @@ void KeyBoard::Callback(uint32_t ioOffset, int len, bool is_write)
     uint32_t offset = ioOffset - KEYBAORD_OFFSET;
     assert(!is_write);
     assert(offset == 0);
-    *(uint32_t *)region->space = key_dequeue();
-    if (*(uint32_t *)region->space != 0)
-        printf("key_dequeue: %d\n", *(uint32_t *)region->space);
+    *(uint32_t *)regions[0]->space = key_dequeue();
+    if (*(uint32_t *)regions[0]->space != 0)
+        printf("key_dequeue: %d\n", *(uint32_t *)regions[0]->space);
 }

@@ -11,7 +11,7 @@ private:
 
 public:
     void Init() override;
-    void Callback(uint32_t, int, bool) override;
+    void Callback(uint32_t, int, bool);
 };
 
 extern void send_key(uint8_t scancode, bool is_keydown);

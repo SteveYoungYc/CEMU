@@ -9,7 +9,7 @@ class Timer : public Device
 {
 public:
     void Init() override;
-    void Callback(uint32_t, int, bool) override;
+    void Callback(uint32_t, int, bool);
 };
 
 #endif

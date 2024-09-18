@@ -13,12 +13,16 @@ private:
     SDL_Window* window;
     SDL_Texture *texture;
     SDL_Renderer *renderer;
+    uint32_t width;
+    uint32_t height;
 
     void InitScreen();
+    uint32_t GetWidth();
+    uint32_t GetHeight();
 
 public:
     void Init() override;
-    void Callback(uint32_t, int, bool) override;
+    void Callback(uint32_t, int, bool);
 };
 
 #endif

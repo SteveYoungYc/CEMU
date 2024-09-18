@@ -195,7 +195,8 @@ word_t IOMemory::PhysicalRead(paddr_t pa, uint32_t len)
 {
     MemRegion *region = ioMap.FindMap(pa);
     assert(region != nullptr);
-    region->device->Callback(pa - IOBase, len, false);
+
+    region->device->ExecuteCallbacks(pa - IOBase, len, false);
     return Memory::PhysicalRead(pa, len);
 }
 
@@ -205,7 +206,7 @@ void IOMemory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
     Memory::PhysicalWrite(pa, data, len);
     MemRegion *region = ioMap.FindMap(pa);
     assert(region != nullptr);
-    region->device->Callback(pa - IOBase, len, true);
+    region->device->ExecuteCallbacks(pa - IOBase, len, true);
 }
 
 MemRegion *IOMemory::IOMap(Device *device, const char *name, paddr_t pa, uint32_t len)

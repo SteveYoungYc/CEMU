@@ -9,8 +9,10 @@ void Serial::PutChar(char c)
 
 void Serial::Init()
 {
-    region = ioMem.IOMap(this, "Serial", ioMem.IOBase + SERIAL_OFFSET, 8);
+    MemRegion *region = ioMem.IOMap(this, "Serial", ioMem.IOBase + SERIAL_OFFSET, 8);
     region->space = ioMem.GetBasePtr() + SERIAL_OFFSET;
+    regions.emplace_back(region);
+    callbacks.emplace_back(static_cast<CallbackFunc>(&Serial::Callback));
 }
 
 void Serial::Callback(uint32_t ioOffset, int len, bool is_write)
@@ -21,7 +23,7 @@ void Serial::Callback(uint32_t ioOffset, int len, bool is_write)
     {
     case CH_OFFSET:
         if (is_write)
-            PutChar(region->space[0]);
+            PutChar(regions[0]->space[0]);
         else
             assert("do not support read");
         break;

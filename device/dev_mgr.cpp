@@ -8,11 +8,15 @@ void DeviceManager::Init()
 {
     serial.Init();
     timer.Init();
+#ifdef HAS_SCREEN_KEYBOARD
     keyboard.Init();
+    vga.Init();
+#endif
 }
 
 void DeviceManager::Update()
 {
+#ifdef HAS_SCREEN_KEYBOARD
     static uint64_t last = 0;
     uint64_t now = GetTime();
     if (now - last < 1000000 / TIMER_HZ)
@@ -20,8 +24,6 @@ void DeviceManager::Update()
         return;
     }
     last = now;
-
-    //   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -45,4 +47,5 @@ void DeviceManager::Update()
             break;
         }
     }
+#endif
 }

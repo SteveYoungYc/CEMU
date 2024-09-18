@@ -65,10 +65,10 @@ static inline bool InterpretRelop(uint32_t relop, const rtlreg_t src1, const rtl
 #define dsrc1 (id_src1->preg)
 #define dsrc2 (id_src2->preg)
 #define ddest (id_dest->preg)
-#define s0    (&baseCPU->tmp_reg[0])
-#define s1    (&baseCPU->tmp_reg[1])
-#define s2    (&baseCPU->tmp_reg[2])
-#define t0    (&baseCPU->tmp_reg[3])
+#define regs0 (&baseCPU->tmp_reg[0])
+#define regs1 (&baseCPU->tmp_reg[1])
+#define regs2 (&baseCPU->tmp_reg[2])
+#define regt0 (&baseCPU->tmp_reg[3])
 #define rz    (&baseCPU->rzero)
 
 #define c_shift_mask 0x1f

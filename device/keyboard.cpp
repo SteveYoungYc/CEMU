@@ -61,19 +61,6 @@ void send_key(uint8_t scancode, bool is_keydown)
 
 void KeyBoard::Init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        return;
-    }
-
-    SDL_Window* window = SDL_CreateWindow("SDL",
-                                          SDL_WINDOWPOS_UNDEFINED,
-                                          SDL_WINDOWPOS_UNDEFINED,
-                                          640, 480,
-                                          SDL_WINDOW_SHOWN);
-    if (!window) {
-        SDL_Quit();
-        return;
-    }
     region = ioMem.IOMap(this, "KeyBoard", ioMem.IOBase + KEYBAORD_OFFSET, 4);
     region->space = ioMem.GetBasePtr() + KEYBAORD_OFFSET;
     *(uint32_t *)region->space = _KEY_NONE;

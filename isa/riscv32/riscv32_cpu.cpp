@@ -12,7 +12,7 @@ const char *RISCV32_CPU::regs[] = {
 void RISCV32_CPU::Reset()
 {
     pc = Memory::memBase;
-    gpr[0] = 0;
+    riscv32Reg.gpr[0] = 0;
 }
 
 void RISCV32_CPU::Run()
@@ -33,7 +33,7 @@ void RISCV32_CPU::PrintReg()
 {
     for (int i = 0; i < 32; i++)
     {
-        InfoPrint("%s\t\t0x%x\n", regs[i], gpr[i]);
+        InfoPrint("%s\t\t0x%x\n", regs[i], riscv32Reg.gpr[i]);
     }
 }
 
@@ -44,7 +44,7 @@ word_t RISCV32_CPU::RegStrToVal(const char *s, bool *success)
         if (strcmp(s, regs[i]) == 0)
         {
             *success = true;
-            return gpr[i];
+            return riscv32Reg.gpr[i];
         }
     }
     *success = false;

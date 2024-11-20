@@ -6,7 +6,7 @@
 #include <device/keyboard.h>
 #include <device/vga.h>
 
-#define HAS_SCREEN_KEYBOARD
+// #define HAS_SCREEN_KEYBOARD
 
 class DeviceManager
 {

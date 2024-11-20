@@ -28,7 +28,7 @@ static def_DopHelper(r)
     else
     {
         assert(val >= 0 && val < 32);
-        op->preg = &riscv32CPU.gpr[val];
+        op->preg = &riscv32Reg.gpr[val];
     }
 }
 
@@ -167,6 +167,18 @@ InstEntry RISCV32_Decoder::jal[] = {
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
+InstEntry RISCV32_Decoder::csr[] = {
+    {0b00000000000000000000000000000000, csrMask, &RISCV32_Decoder::op_ecall},
+    {0b00000000000000000001000000000000, csrMask, &RISCV32_Decoder::op_csrrw},
+    {0b00000000000000000010000000000000, csrMask, &RISCV32_Decoder::op_csrrs},
+    {0b00000000000000000011000000000000, csrMask, &RISCV32_Decoder::op_csrrc},
+    // {0b00000000000000000101000001110011, csrMask, &RISCV32_Decoder::op_csrrwi},
+    // {0b00000000000000000110000001110011, csrMask, &RISCV32_Decoder::op_csrrsi},
+    // {0b00000000000000000111000001110011, csrMask, &RISCV32_Decoder::op_csrrci},
+    {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
+};
+
+
 InstEntry RISCV32_Decoder::cemu_trap[] = {
     {0, 0, &RISCV32_Decoder::op_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
@@ -183,6 +195,7 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b1100111, opcodeMask, InstKind::I, jump},
     {0b0010111, opcodeMask, InstKind::U, auipc},
     {0b1101111, opcodeMask, InstKind::J, jal},
+    {0b1110011, opcodeMask, InstKind::I, csr},
     {0b1101011, opcodeMask, InstKind::U, cemu_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), InstKind::S, nullptr}
 };

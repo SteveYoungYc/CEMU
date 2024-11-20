@@ -6,7 +6,8 @@
 #include <device/dev_mgr.h>
 
 RISCV32_Decoder riscv32Decoder;
-RISCV32_CPU riscv32CPU(&riscv32Decoder);
+RISCV32_REG riscv32Reg;
+RISCV32_CPU riscv32CPU(&riscv32Decoder, &riscv32Reg);
 ICpu *baseCPU = static_cast<ICpu*>(&riscv32CPU);
 Simulator simulator;
 NormalMemory memory;

@@ -2,24 +2,26 @@
 #define __RISCV32_CPU_H__
 
 #include <riscv32/riscv32_decode.h>
+#include <riscv32/reg.h>
 
 class RISCV32_CPU : public ICpu
 {
 private:
     static const char *regs[];
 public:
-    word_t gpr[32];
     RISCV32_Decoder *decoder;
+    RISCV32_REG *reg;
 
-    RISCV32_CPU(RISCV32_Decoder *decoder)
+    RISCV32_CPU(RISCV32_Decoder *decoder, RISCV32_REG *reg)
     {
         this->decoder = decoder;
+        this->reg = reg;
     }
 
     inline word_t *GetReg(uint32_t idx)
     {
         assert(idx >= 0 && idx < 32);
-        return gpr;
+        return riscv32Reg.gpr;
     }
 
     void PrintReg() override;

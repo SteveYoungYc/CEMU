@@ -4,6 +4,7 @@
 #include <common.h>
 #include <cpu.h>
 #include <decoder.h>
+#include <riscv32/reg.h>
 #include <log.h>
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
@@ -129,6 +130,7 @@ private:
     static const uint32_t immMask1   = 0b11111110000000000111000000000000;
     static const uint32_t branchMask = 0b00000000000000000111000000000000;
     static const uint32_t jumpMask   = 0b00000000000000000111000000000000;
+    static const uint32_t csrMask    = 0b00000000000000000111000000000000;
 
     static OpcodeEntry opcodeTable[];
     static InstEntry cal[];
@@ -140,6 +142,7 @@ private:
     static InstEntry branch[];
     static InstEntry auipc[];
     static InstEntry jal[];
+    static InstEntry csr[];
     static InstEntry cemu_trap[];
 
     static DecoderFunc decoderTable[];
@@ -288,6 +291,35 @@ private:
     {
         *ddest = pc + 4;
         rtl_j(pc + id_src1->imm);
+    }
+
+    // CSR
+    inline void op_ecall()
+    {
+        riscv32Reg.mepc = pc;
+        riscv32Reg.mcause = 9;
+        rtl_j(riscv32Reg.mtvec);
+    }
+    inline void op_csrrw()
+    {
+        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        *regs0 = *regAddr;
+        *regAddr = *dsrc1;
+        *ddest = *regs0;
+    }
+    inline void op_csrrs()
+    {
+        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        *regs0 = *regAddr;
+        *regAddr |= *dsrc1;
+        *ddest = *regs0;
+    }
+    inline void op_csrrc()
+    {
+        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        *regs0 = *regAddr;
+        *regAddr &= ~(*dsrc1);
+        *ddest = *regs0;
     }
 
     // CEMU trap

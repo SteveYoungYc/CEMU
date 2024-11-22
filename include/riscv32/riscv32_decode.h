@@ -147,6 +147,8 @@ private:
 
     static DecoderFunc decoderTable[];
 
+    static InstEntry systemInst[];
+
     void decode_R(int width);
     void decode_I(int width);
     void decode_S(int width);
@@ -293,13 +295,19 @@ private:
         rtl_j(pc + id_src1->imm);
     }
 
-    // CSR
+    // System instruction
     inline void op_ecall()
     {
         riscv32Reg.mepc = pc;
-        riscv32Reg.mcause = 9;
+        riscv32Reg.mcause = 8;
         rtl_j(riscv32Reg.mtvec);
     }
+    inline void op_mret()
+    {
+        rtl_j(riscv32Reg.mepc);
+    }
+
+    // CSR
     inline void op_csrrw()
     {
         word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);

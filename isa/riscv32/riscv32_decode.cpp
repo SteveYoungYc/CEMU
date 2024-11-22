@@ -168,13 +168,9 @@ InstEntry RISCV32_Decoder::jal[] = {
 };
 
 InstEntry RISCV32_Decoder::csr[] = {
-    {0b00000000000000000000000000000000, csrMask, &RISCV32_Decoder::op_ecall},
     {0b00000000000000000001000000000000, csrMask, &RISCV32_Decoder::op_csrrw},
     {0b00000000000000000010000000000000, csrMask, &RISCV32_Decoder::op_csrrs},
     {0b00000000000000000011000000000000, csrMask, &RISCV32_Decoder::op_csrrc},
-    // {0b00000000000000000101000001110011, csrMask, &RISCV32_Decoder::op_csrrwi},
-    // {0b00000000000000000110000001110011, csrMask, &RISCV32_Decoder::op_csrrsi},
-    // {0b00000000000000000111000001110011, csrMask, &RISCV32_Decoder::op_csrrci},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
@@ -182,6 +178,11 @@ InstEntry RISCV32_Decoder::csr[] = {
 InstEntry RISCV32_Decoder::cemu_trap[] = {
     {0, 0, &RISCV32_Decoder::op_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
+};
+
+InstEntry RISCV32_Decoder::systemInst[] = {
+    {0b00000000000000000000000001110011, 0, &RISCV32_Decoder::op_ecall},
+    {0b00110000001000000000000001110011, 0, &RISCV32_Decoder::op_mret}
 };
 
 
@@ -202,6 +203,15 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
 
 uint32_t RISCV32_Decoder::DecodeAndExecute()
 {
+    for (auto sysInst : systemInst)
+    {
+        if (info->inst.val == sysInst.pattern)
+        {
+            dnpc = snpc;
+            (this->*sysInst.InstExe)();
+            return 0;
+        }
+    }
     for (OpcodeEntry *opEntry = opcodeTable; opEntry->instPtr != nullptr; opEntry++)
     {
         uint32_t masked = info->inst.val & opEntry->mask;

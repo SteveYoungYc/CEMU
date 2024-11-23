@@ -224,6 +224,7 @@ word_t PhysicalRead(paddr_t pa, uint32_t len)
     {
         return ioMem.PhysicalRead(pa, len);
     }
+    InfoPrint("Invalid PA=0x%x\n", pa);
     assert(0);
 }
 
@@ -239,5 +240,6 @@ void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
         ioMem.PhysicalWrite(pa, data, len);
         return;
     }
+    InfoPrint("Invalid PA=0x%x, data=0x%x\n", pa, data);
     assert(0);
 }

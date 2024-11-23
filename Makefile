@@ -13,10 +13,15 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
 export AS LD CC CPP AR NM
 export STRIP OBJCOPY OBJDUMP
 
-CFLAGS := -Wall -g
+LLVM_CONFIG := llvm-config
+LLVM_CXXFLAGS := $(shell $(LLVM_CONFIG) --cxxflags)
+LLVM_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
+LLVM_LIBS := $(shell $(LLVM_CONFIG) --libs)
+
+CFLAGS := -Wall -g $(LLVM_CXXFLAGS)
 CFLAGS += -I $(shell pwd)/include
 
-LDFLAGS := -lreadline -lSDL2
+LDFLAGS := -lreadline -lSDL2 $(LLVM_LDFLAGS) $(LLVM_LIBS)
 
 export CFLAGS LDFLAGS
 

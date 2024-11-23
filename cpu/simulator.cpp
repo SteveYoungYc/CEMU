@@ -5,6 +5,7 @@
 #include <simulator.h>
 #include <string.h>
 #include <log.h>
+#include <utils.h>
 #include <device/dev_mgr.h>
 
 static const uint32_t img [] = {
@@ -28,6 +29,7 @@ void Simulator::Init()
     cpu = &riscv32CPU;
     cpu->Reset();
     imgFile = args.imgFile;
+    init_disasm("riscv32");
 }
 
 long Simulator::LoadImg()

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the directory containing the .bin files
-directory="/home/chen/emu/am/am-kernels/tests/cpu-tests/build"
+directory="$AMKERNEL_HOME/tests/cpu-tests/build"
 
 # Check if the directory exists
 if [ ! -d "$directory" ]; then

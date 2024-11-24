@@ -1,6 +1,7 @@
 #ifndef __SIMULATOR_H__
 #define __SIMULATOR_H__
 
+#include <trace.h>
 #include <riscv32/riscv32_cpu.h>
 
 class Simulator
@@ -12,9 +13,12 @@ public:
     RISCV32_CPU *cpu;
     RISCV32_Decoder *decoder;
     SimStatus simStatus;
+    ITrace itrace;
 
     Simulator();
     ~Simulator();
+
+    ITrace *GetITrace();
 
     void Init();
     long LoadImg();

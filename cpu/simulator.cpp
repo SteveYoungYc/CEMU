@@ -5,7 +5,7 @@
 #include <simulator.h>
 #include <string.h>
 #include <log.h>
-#include <utils.h>
+#include <trace.h>
 #include <device/dev_mgr.h>
 
 static const uint32_t img [] = {
@@ -29,7 +29,12 @@ void Simulator::Init()
     cpu = &riscv32CPU;
     cpu->Reset();
     imgFile = args.imgFile;
-    init_disasm("riscv32");
+
+    // signal(SIGINT, signalHandler);
+    // signal(SIGTERM, signalHandler);
+    // signal(SIGSEGV, signalHandler);
+    signal(SIGABRT, signalHandler);
+    itrace.Init("riscv32");
 }
 
 long Simulator::LoadImg()
@@ -99,3 +104,7 @@ void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
     simStatus.retVal = retVal;
 }
 
+ITrace *Simulator::GetITrace()
+{
+    return &itrace;
+}

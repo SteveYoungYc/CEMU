@@ -5,21 +5,33 @@
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
 
+#include <trace.h>
+#include <log.h>
+#include <simulator.h>
+
+using namespace std;
 using namespace llvm;
 
 static llvm::MCDisassembler *gDisassembler = nullptr;
 static llvm::MCSubtargetInfo *gSTI = nullptr;
 static llvm::MCInstPrinter *gIP = nullptr;
 
-void init_disasm(const char *triple)
+void signalHandler(int signal)
+{
+    InfoPrint("Got SIGABRT. Itrace:\n");
+    simulator.GetITrace()->Print();
+    exit(0);
+}
+
+void ITrace::Init(const char *triple)
 {
     llvm::InitializeAllTargetInfos();
     llvm::InitializeAllTargetMCs();
     llvm::InitializeAllAsmParsers();
     llvm::InitializeAllDisassemblers();
 
-    std::string errstr;
-    std::string gTriple(triple);
+    string errstr;
+    string gTriple(triple);
 
     llvm::MCInstrInfo *gMII = nullptr;
     llvm::MCRegisterInfo *gMRI = nullptr;
@@ -32,7 +44,7 @@ void init_disasm(const char *triple)
 
     MCTargetOptions MCOptions;
     gSTI = target->createMCSubtargetInfo(gTriple, "", "");
-    std::string isa = target->getName();
+    string isa = target->getName();
     if (isa == "riscv32" || isa == "riscv64")
     {
         gSTI->ApplyFeatureFlag("+m");
@@ -58,14 +70,14 @@ void init_disasm(const char *triple)
     gIP->setPrintBranchImmAsAddress(true);
 }
 
-void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte)
+void ITrace::DoDisassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte)
 {
     MCInst inst;
     llvm::ArrayRef<uint8_t> arr(code, nbyte);
     uint64_t dummy_size = 0;
     gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
 
-    std::string s;
+    string s;
     raw_string_ostream os(s);
     gIP->printInst(&inst, pc, "", *gSTI, os);
 
@@ -73,4 +85,33 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte)
     const char *p = s.c_str() + skip;
     assert((int)s.length() - skip < size);
     strcpy(str, p);
+}
+
+void ITrace::Disassemble(uint64_t pc, uint8_t *code)
+{
+    DoDisassemble(instBuf, INST_BUF, pc, code, 4);
+}
+
+void ITrace::Record(uint64_t pc, uint8_t *code)
+{
+    ITraceData itraceData;
+
+    Disassemble(pc, code);
+    itraceData.pc = pc;
+    strcpy(itraceData.str, instBuf);
+    if (itraceRingBuf.size() >= ITRACE_RING_BUG_SZIE)
+    {
+        itraceRingBuf.pop();
+    }
+    itraceRingBuf.push(itraceData);
+}
+
+void ITrace::Print()
+{
+    while (!itraceRingBuf.empty())
+    {
+        ITraceData &itraceData = itraceRingBuf.front();
+        InfoPrint("[itrace] 0x%x\t\t%s\n", itraceData.pc, itraceData.str);
+        itraceRingBuf.pop();
+    }
 }

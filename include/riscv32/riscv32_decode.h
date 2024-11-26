@@ -278,8 +278,9 @@ private:
 
     inline void op_jalr()
     {
+        *regs0 = *dsrc1;
         *ddest = pc + 4;
-        rtl_j(*dsrc1 + id_src2->imm);
+        rtl_j(*regs0 + id_src2->imm);
     }
     inline void op_lui()
     {

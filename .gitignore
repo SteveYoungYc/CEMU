@@ -4,3 +4,4 @@
 cemu
 compile_commands.json
 perf.*
+*.log

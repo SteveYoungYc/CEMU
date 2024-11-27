@@ -281,6 +281,7 @@ private:
         *regs0 = *dsrc1;
         *ddest = pc + 4;
         rtl_j(*regs0 + id_src2->imm);
+        HandleFTrace(dnpc);
     }
     inline void op_lui()
     {
@@ -294,6 +295,7 @@ private:
     {
         *ddest = pc + 4;
         rtl_j(pc + id_src1->imm);
+        HandleFTrace(dnpc);
     }
 
     // System instruction
@@ -337,6 +339,8 @@ private:
         InfoPrint("CEMU Trap!\n");
         rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->imm >> 12);
     }
+
+    void HandleFTrace(uint32_t addr);
 
 public:
     RISCV32_DecodeInfo *info;

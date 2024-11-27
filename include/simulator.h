@@ -14,6 +14,7 @@ public:
     RISCV32_Decoder *decoder;
     SimStatus simStatus;
     ITrace itrace;
+    FTrace ftrace;
 
     Simulator();
     ~Simulator();

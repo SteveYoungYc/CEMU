@@ -1,6 +1,7 @@
 #include <riscv32/riscv32_decode.h>
 #include <simulator.h>
 
+using namespace std;
 
 RISCV32_Decoder::RISCV32_Decoder()
 {
@@ -10,6 +11,23 @@ RISCV32_Decoder::RISCV32_Decoder()
 RISCV32_Decoder::~RISCV32_Decoder()
 {
     delete info;
+}
+
+void RISCV32_Decoder::HandleFTrace(uint32_t addr)
+{
+    FTrace *ftrace = &simulator.ftrace;
+
+    if (info->inst.val == 0x00008067)   // ret
+    {
+        ftrace->Return();
+        return;
+    }
+
+    string name = ftrace->FindFunctionByAddress(addr);
+    if (name != "")
+    {
+        ftrace->CallFucntion(name);
+    }
 }
 
 static def_DopHelper(i)

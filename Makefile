@@ -21,7 +21,7 @@ LLVM_LIBS := $(shell $(LLVM_CONFIG) --libs)
 CFLAGS := -Wall -g $(LLVM_CXXFLAGS)
 CFLAGS += -I $(shell pwd)/include
 
-LDFLAGS := -lreadline -lSDL2 $(LLVM_LDFLAGS) $(LLVM_LIBS)
+LDFLAGS := -lreadline -lSDL2 -lelf $(LLVM_LDFLAGS) $(LLVM_LIBS)
 
 export CFLAGS LDFLAGS
 

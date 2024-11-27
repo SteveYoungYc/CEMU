@@ -30,11 +30,9 @@ void Simulator::Init()
     cpu->Reset();
     imgFile = args.imgFile;
 
-    // signal(SIGINT, signalHandler);
-    // signal(SIGTERM, signalHandler);
-    // signal(SIGSEGV, signalHandler);
     signal(SIGABRT, signalHandler);
     itrace.Init("riscv32");
+    ftrace.Init();
 }
 
 long Simulator::LoadImg()

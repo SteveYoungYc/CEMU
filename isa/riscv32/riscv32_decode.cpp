@@ -5,12 +5,7 @@ using namespace std;
 
 RISCV32_Decoder::RISCV32_Decoder()
 {
-    info = new RISCV32_DecodeInfo();
-}
-
-RISCV32_Decoder::~RISCV32_Decoder()
-{
-    delete info;
+    info = make_shared<RISCV32_DecodeInfo>();
 }
 
 void RISCV32_Decoder::HandleFTrace(uint32_t addr)
@@ -30,6 +25,16 @@ void RISCV32_Decoder::HandleFTrace(uint32_t addr)
     }
 }
 
+shared_ptr<RISCV32_REG> RISCV32_Decoder::GetReg()
+{
+    return simulator.reg;
+}
+
+shared_ptr<ICpu> RISCV32_Decoder::GetBaseCPU()
+{
+    return simulator.cpu;
+}
+
 static def_DopHelper(i)
 {
     op->imm = val;
@@ -46,7 +51,7 @@ static def_DopHelper(r)
     else
     {
         assert(val >= 0 && val < 32);
-        op->preg = &riscv32Reg.gpr[val];
+        op->preg = &simulator.reg->gpr[val];
     }
 }
 

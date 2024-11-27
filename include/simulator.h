@@ -10,8 +10,10 @@ private:
     const char *imgFile;
 
 public:
-    RISCV32_CPU *cpu;
-    RISCV32_Decoder *decoder;
+    std::shared_ptr<RISCV32_CPU> cpu;
+    std::shared_ptr<RISCV32_REG> reg;
+    std::shared_ptr<RISCV32_Decoder> decoder;
+
     SimStatus simStatus;
     ITrace itrace;
     FTrace ftrace;

@@ -301,33 +301,33 @@ private:
     // System instruction
     inline void op_ecall()
     {
-        riscv32Reg.mepc = pc;
-        riscv32Reg.mcause = 8;
-        rtl_j(riscv32Reg.mtvec);
+        GetReg()->mepc = pc;
+        GetReg()->mcause = 8;
+        rtl_j(GetReg()->mtvec);
     }
     inline void op_mret()
     {
-        rtl_j(riscv32Reg.mepc);
+        rtl_j(GetReg()->mepc);
     }
 
     // CSR
     inline void op_csrrw()
     {
-        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
         *regs0 = *regAddr;
         *regAddr = *dsrc1;
         *ddest = *regs0;
     }
     inline void op_csrrs()
     {
-        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
         *regs0 = *regAddr;
         *regAddr |= *dsrc1;
         *ddest = *regs0;
     }
     inline void op_csrrc()
     {
-        word_t *regAddr = riscv32Reg.GetReg(id_src2->imm);
+        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
         *regs0 = *regAddr;
         *regAddr &= ~(*dsrc1);
         *ddest = *regs0;
@@ -341,15 +341,14 @@ private:
     }
 
     void HandleFTrace(uint32_t addr);
+    std::shared_ptr<RISCV32_REG> GetReg();
+    std::shared_ptr<ICpu> GetBaseCPU();
 
 public:
-    RISCV32_DecodeInfo *info;
+    std::shared_ptr<RISCV32_DecodeInfo> info;
 
     RISCV32_Decoder();
-    ~RISCV32_Decoder();
     uint32_t DecodeAndExecute() override;
 };
-
-extern RISCV32_Decoder riscv32Decoder;
 
 #endif

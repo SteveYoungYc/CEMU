@@ -49,7 +49,7 @@ uint32_t Debugger::CommandInfo(char *args)
     }
     if (strcmp(args, "r") == 0)
     {
-        baseCPU->PrintReg();
+        simulator.cpu->PrintReg();
     }
     return 0;
 }

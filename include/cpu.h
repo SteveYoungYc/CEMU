@@ -22,6 +22,4 @@ public:
     virtual void DecodeAndExecute() {}
 };
 
-extern ICpu *baseCPU;
-
 #endif

@@ -8,6 +8,8 @@
 #include <trace.h>
 #include <device/dev_mgr.h>
 
+using namespace std;
+
 static const uint32_t img [] = {
     0x800002b7,  // lui t0,0x80000
     0x0002a023,  // sw  zero,0(t0)
@@ -25,8 +27,9 @@ Simulator::~Simulator()
 
 void Simulator::Init()
 {
-    decoder = &riscv32Decoder;
-    cpu = &riscv32CPU;
+    reg = std::make_shared<RISCV32_REG>();
+    decoder = std::make_shared<RISCV32_Decoder>();
+    cpu = std::make_shared<RISCV32_CPU>();
     cpu->Reset();
     imgFile = args.imgFile;
 

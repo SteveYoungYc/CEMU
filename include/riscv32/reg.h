@@ -17,7 +17,7 @@ public:
     word_t mtval;
     word_t misa;
 
-    word_t *GetReg(uint32_t val)
+    word_t *GetCSRRegister(uint32_t val)
     {
         switch (val)
         {
@@ -45,7 +45,5 @@ public:
         }
     }
 };
-
-extern RISCV32_REG riscv32Reg;
 
 #endif

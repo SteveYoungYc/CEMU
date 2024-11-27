@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <memory>
 
 
 #define concat(x, y)  x##y

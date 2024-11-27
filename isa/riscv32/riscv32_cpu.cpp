@@ -1,5 +1,5 @@
 #include <cstring>
-#include <riscv32/riscv32_cpu.h>
+#include <simulator.h>
 #include <memory.h>
 
 const char *RISCV32_CPU::regs[] = {
@@ -9,10 +9,16 @@ const char *RISCV32_CPU::regs[] = {
     "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+RISCV32_CPU::RISCV32_CPU()
+{
+    reg = simulator.reg;
+    decoder = simulator.decoder;
+}
+
 void RISCV32_CPU::Reset()
 {
     pc = Memory::memBase;
-    riscv32Reg.gpr[0] = 0;
+    reg->gpr[0] = 0;
 }
 
 void RISCV32_CPU::Run()
@@ -33,7 +39,7 @@ void RISCV32_CPU::PrintReg()
 {
     for (int i = 0; i < 32; i++)
     {
-        InfoPrint("%s\t\t0x%x\n", regs[i], riscv32Reg.gpr[i]);
+        InfoPrint("%s\t\t0x%x\n", regs[i], reg->gpr[i]);
     }
 }
 
@@ -44,7 +50,7 @@ word_t RISCV32_CPU::RegStrToVal(const char *s, bool *success)
         if (strcmp(s, regs[i]) == 0)
         {
             *success = true;
-            return riscv32Reg.gpr[i];
+            return reg->gpr[i];
         }
     }
     *success = false;

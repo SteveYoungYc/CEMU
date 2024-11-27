@@ -9,19 +9,15 @@ class RISCV32_CPU : public ICpu
 private:
     static const char *regs[];
 public:
-    RISCV32_Decoder *decoder;
-    RISCV32_REG *reg;
+    std::shared_ptr<RISCV32_REG> reg;
+    std::shared_ptr<RISCV32_Decoder> decoder;
 
-    RISCV32_CPU(RISCV32_Decoder *decoder, RISCV32_REG *reg)
-    {
-        this->decoder = decoder;
-        this->reg = reg;
-    }
+    RISCV32_CPU();
 
     inline word_t *GetReg(uint32_t idx)
     {
         assert(idx >= 0 && idx < 32);
-        return riscv32Reg.gpr;
+        return reg->gpr;
     }
 
     void PrintReg() override;
@@ -30,7 +26,5 @@ public:
     void Run() override;
     void DecodeAndExecute() override;
 };
-
-extern RISCV32_CPU riscv32CPU;
 
 #endif

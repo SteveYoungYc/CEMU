@@ -205,7 +205,7 @@ int Expression::Calculate(int p, int q)
             }
             break;
         case TK_DEREF:
-            val = memory.PhysicalRead(strtol(tokens[p].str, NULL, 16), 1);
+            val = simulator.memory->PhysicalRead(strtol(tokens[p].str, NULL, 16), 1);
             break;
         default:
             InfoPrint("[invalid]\n");

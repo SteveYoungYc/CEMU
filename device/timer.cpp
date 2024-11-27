@@ -1,11 +1,11 @@
 #include <ctime>
 #include <device/timer.h>
-#include <memory.h>
+#include <simulator.h>
 
 void Timer::Init()
 {
-    MemRegion *region = ioMem.IOMap(this, "Timer", ioMem.IOBase + TIMER_OFFSET, 8);
-    region->space = ioMem.GetBasePtr() + TIMER_OFFSET;
+    MemRegion *region = simulator.ioMem->IOMap(this, "Timer", simulator.ioMem->IOBase + TIMER_OFFSET, 8);
+    region->space = simulator.ioMem->GetBasePtr() + TIMER_OFFSET;
     regions.emplace_back(region);
     callbacks.emplace_back(static_cast<CallbackFunc>(&Timer::Callback));
 }

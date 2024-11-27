@@ -1,6 +1,7 @@
 #include <memory.h>
 #include <log.h>
 #include <device.h>
+#include <simulator.h>
 
 Memory::Memory()
 {
@@ -216,13 +217,13 @@ MemRegion *IOMemory::IOMap(Device *device, const char *name, paddr_t pa, uint32_
 
 word_t PhysicalRead(paddr_t pa, uint32_t len)
 {
-    if (likely(memory.IsValidPA(pa)))
+    if (likely(simulator.memory->IsValidPA(pa)))
     {
-        return memory.PhysicalRead(pa, len);
+        return simulator.memory->PhysicalRead(pa, len);
     }
-    if (likely(ioMem.IsValidPA(pa)))
+    if (likely(simulator.ioMem->IsValidPA(pa)))
     {
-        return ioMem.PhysicalRead(pa, len);
+        return simulator.ioMem->PhysicalRead(pa, len);
     }
     InfoPrint("Invalid PA=0x%x\n", pa);
     assert(0);
@@ -230,14 +231,14 @@ word_t PhysicalRead(paddr_t pa, uint32_t len)
 
 void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
-    if (likely(memory.IsValidPA(pa)))
+    if (likely(simulator.memory->IsValidPA(pa)))
     {
-        memory.PhysicalWrite(pa, data, len);
+        simulator.memory->PhysicalWrite(pa, data, len);
         return;
     }
-    if (likely(ioMem.IsValidPA(pa)))
+    if (likely(simulator.ioMem->IsValidPA(pa)))
     {
-        ioMem.PhysicalWrite(pa, data, len);
+        simulator.ioMem->PhysicalWrite(pa, data, len);
         return;
     }
     InfoPrint("Invalid PA=0x%x, data=0x%x\n", pa, data);

@@ -1,6 +1,5 @@
 #include <device/serial.h>
-#include <memory.h>
-#include <log.h>
+#include <simulator.h>
 
 void Serial::PutChar(char c)
 {
@@ -9,8 +8,8 @@ void Serial::PutChar(char c)
 
 void Serial::Init()
 {
-    MemRegion *region = ioMem.IOMap(this, "Serial", ioMem.IOBase + SERIAL_OFFSET, 8);
-    region->space = ioMem.GetBasePtr() + SERIAL_OFFSET;
+    MemRegion *region = simulator.ioMem->IOMap(this, "Serial", simulator.ioMem->IOBase + SERIAL_OFFSET, 8);
+    region->space = simulator.ioMem->GetBasePtr() + SERIAL_OFFSET;
     regions.emplace_back(region);
     callbacks.emplace_back(static_cast<CallbackFunc>(&Serial::Callback));
 }

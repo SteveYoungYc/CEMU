@@ -5,7 +5,7 @@ using namespace std;
 
 RISCV32_Decoder::RISCV32_Decoder()
 {
-    info = make_shared<RISCV32_DecodeInfo>();
+    info = make_unique<RISCV32_DecodeInfo>();
 }
 
 void RISCV32_Decoder::HandleFTrace(uint32_t addr)

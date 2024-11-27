@@ -81,7 +81,7 @@ uint32_t Debugger::Command_X(char *args)
         {
             InfoPrint("\n");
         }
-        InfoPrint("[0x%x] 0x%x\t", regAddr, memory.PhysicalRead(regAddr, 1));
+        InfoPrint("[0x%x] 0x%x\t", regAddr, simulator.memory->PhysicalRead(regAddr, 1));
         regAddr++;
     }
     InfoPrint("\n");
@@ -165,7 +165,7 @@ char *Debugger::ReadLine()
 
 void Debugger::Init()
 {
-    mode = args.isBatch ? Mode::Batch : Mode::Debug;
+    mode = simulator.args->isBatch ? Mode::Batch : Mode::Debug;
     expr.Init();
 }
 

@@ -24,6 +24,4 @@ public:
     void Update();
 };
 
-extern DeviceManager devManager;
-
 #endif

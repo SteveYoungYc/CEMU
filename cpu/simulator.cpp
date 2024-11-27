@@ -25,17 +25,28 @@ Simulator::~Simulator()
 {
 }
 
-void Simulator::Init()
+void Simulator::Init(int argc, char *argv[])
 {
-    reg = std::make_shared<RISCV32_REG>();
-    decoder = std::make_shared<RISCV32_Decoder>();
-    cpu = std::make_shared<RISCV32_CPU>();
+    memory = make_unique<NormalMemory>();
+    ioMem = make_unique<IOMemory>();
+    reg = make_shared<RISCV32_REG>();
+    decoder = make_shared<RISCV32_Decoder>();
+    cpu = make_shared<RISCV32_CPU>();
+    args = make_unique<Args>();
+    devManager = make_unique<DeviceManager>();
+
+    args->ParseArgs(argc, argv);
+    imgFile = args->imgFile;
+    memory->Init();
+    ioMem->Init();
     cpu->Reset();
-    imgFile = args.imgFile;
+    devManager->Init();
 
     signal(SIGABRT, signalHandler);
     itrace.Init("riscv32");
     ftrace.Init();
+
+    LoadImg();
 }
 
 long Simulator::LoadImg()
@@ -43,7 +54,7 @@ long Simulator::LoadImg()
     if (imgFile == NULL)
     {
         InfoPrint("No image is given. Use the default build-in image.\n");
-        memcpy(memory.GuestToHost(Memory::memBase), img, sizeof(img));
+        memcpy(memory->GuestToHost(Memory::memBase), img, sizeof(img));
         return 4096; // built-in image size
     }
 
@@ -59,7 +70,7 @@ long Simulator::LoadImg()
     InfoPrint("The image is %s, size = %ld\n", imgFile, size);
 
     fseek(fp, 0, SEEK_SET);
-    int ret = fread(memory.GuestToHost(Memory::memBase), size, 1, fp);
+    int ret = fread(memory->GuestToHost(Memory::memBase), size, 1, fp);
     assert(ret == 1);
 
     fclose(fp);
@@ -76,7 +87,7 @@ void Simulator::Run(uint64_t n)
         if (simStatus.status != RUNNING)
             break;
         cpu->pc = decoder->dnpc;
-        devManager.Update();
+        devManager->Update();
     }
 
     switch (simStatus.status)

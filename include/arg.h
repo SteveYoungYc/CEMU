@@ -33,6 +33,4 @@ public:
     int32_t ParseArgs(int argc, char *argv[]);
 };
 
-extern Args args;
-
 #endif

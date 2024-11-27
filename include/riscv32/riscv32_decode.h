@@ -345,7 +345,7 @@ private:
     std::shared_ptr<ICpu> GetBaseCPU();
 
 public:
-    std::shared_ptr<RISCV32_DecodeInfo> info;
+    std::unique_ptr<RISCV32_DecodeInfo> info;
 
     RISCV32_Decoder();
     uint32_t DecodeAndExecute() override;

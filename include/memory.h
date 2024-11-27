@@ -79,7 +79,4 @@ public:
 word_t PhysicalRead(paddr_t pa, uint32_t len);
 void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
 
-extern NormalMemory memory;
-extern IOMemory ioMem;
-
 #endif

@@ -25,11 +25,6 @@ void RISCV32_Decoder::HandleFTrace(uint32_t addr)
     }
 }
 
-shared_ptr<RISCV32_REG> RISCV32_Decoder::GetReg()
-{
-    return simulator.reg;
-}
-
 shared_ptr<ICpu> RISCV32_Decoder::GetBaseCPU()
 {
     return simulator.cpu;
@@ -51,7 +46,7 @@ static def_DopHelper(r)
     else
     {
         assert(val >= 0 && val < 32);
-        op->preg = &simulator.reg->gpr[val];
+        op->preg = &simulator.cpu->gpr[val];
     }
 }
 
@@ -223,6 +218,44 @@ OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b1101011, opcodeMask, InstKind::U, cemu_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), InstKind::S, nullptr}
 };
+
+// System instruction
+void RISCV32_Decoder::op_ecall()
+{
+    simulator.cpu->mepc = pc;
+    simulator.cpu->mcause = 8;
+    rtl_j(simulator.cpu->mtvec);
+}
+
+void RISCV32_Decoder::op_mret()
+{
+    rtl_j(simulator.cpu->mepc);
+}
+
+// CSR
+void RISCV32_Decoder::op_csrrw()
+{
+    word_t *regAddr = simulator.cpu->GetCSRRegister(id_src2->imm);
+    *regs0 = *regAddr;
+    *regAddr = *dsrc1;
+    *ddest = *regs0;
+}
+
+void RISCV32_Decoder::op_csrrs()
+{
+    word_t *regAddr = simulator.cpu->GetCSRRegister(id_src2->imm);
+    *regs0 = *regAddr;
+    *regAddr |= *dsrc1;
+    *ddest = *regs0;
+}
+
+void RISCV32_Decoder::op_csrrc()
+{
+    word_t *regAddr = simulator.cpu->GetCSRRegister(id_src2->imm);
+    *regs0 = *regAddr;
+    *regAddr &= ~(*dsrc1);
+    *ddest = *regs0;
+}
 
 uint32_t RISCV32_Decoder::DecodeAndExecute()
 {

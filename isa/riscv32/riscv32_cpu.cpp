@@ -1,6 +1,5 @@
 #include <cstring>
 #include <simulator.h>
-#include <memory.h>
 
 const char *RISCV32_CPU::regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -9,29 +8,51 @@ const char *RISCV32_CPU::regs[] = {
     "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
-RISCV32_CPU::RISCV32_CPU()
-{
-    reg = simulator.reg;
-    decoder = simulator.decoder;
-}
-
 void RISCV32_CPU::Reset()
 {
     pc = Memory::memBase;
-    reg->gpr[0] = 0;
+    gpr[0] = 0;
 }
 
 void RISCV32_CPU::Run()
 {
-    decoder->info->inst.val = Fetch(&decoder->snpc);
+    simulator.decoder->info->inst.val = Fetch(&simulator.decoder->snpc);
     DecodeAndExecute();
 }
 
 void RISCV32_CPU::DecodeAndExecute()
 {
-    if(decoder->DecodeAndExecute())
+    if(simulator.decoder->DecodeAndExecute())
     {
         assert(!"Instruction not supported");
+    }
+}
+
+word_t *RISCV32_CPU::GetCSRRegister(uint32_t val)
+{
+    switch (val)
+    {
+    case 0x300:
+        return &mstatus;
+    case 0x301:
+        return &misa;
+    case 0x304:
+        return &mie;
+    case 0x305:
+        return &mtvec;
+    case 0x340:
+        return &mscratch;
+    case 0x341:
+        return &mepc;
+    case 0x342:
+        return &mcause;
+    case 0x343:
+        return &mtval;
+    case 0x344:
+        return &mip;
+    default:
+        assert(0 && "Unknown CSR address");
+        return nullptr;
     }
 }
 
@@ -39,7 +60,7 @@ void RISCV32_CPU::PrintReg()
 {
     for (int i = 0; i < 32; i++)
     {
-        InfoPrint("%s\t\t0x%x\n", regs[i], reg->gpr[i]);
+        InfoPrint("%s\t\t0x%x\n", regs[i], gpr[i]);
     }
 }
 
@@ -50,7 +71,7 @@ word_t RISCV32_CPU::RegStrToVal(const char *s, bool *success)
         if (strcmp(s, regs[i]) == 0)
         {
             *success = true;
-            return reg->gpr[i];
+            return gpr[i];
         }
     }
     *success = false;

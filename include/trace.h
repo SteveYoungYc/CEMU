@@ -6,7 +6,6 @@
 #include <queue>
 #include <stack>
 #include <string>
-#include <unordered_map>
 
 #define INST_BUF 32
 #define ITRACE_RING_BUG_SZIE 128

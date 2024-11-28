@@ -1,9 +1,3 @@
-#include <cpu.h>
-#include <cstring>
-#include <memory.h>
-#include <log.h>
-#include <trace.h>
-#include <queue>
 #include <simulator.h>
 
 using namespace std;

@@ -1,12 +1,4 @@
-#include <riscv32/riscv32_cpu.h>
-#include <cpu.h>
-#include <decoder.h>
-#include <memory.h>
 #include <simulator.h>
-#include <string.h>
-#include <log.h>
-#include <trace.h>
-#include <device/dev_mgr.h>
 
 using namespace std;
 
@@ -29,7 +21,6 @@ void Simulator::Init(int argc, char *argv[])
 {
     memory = make_unique<NormalMemory>();
     ioMem = make_unique<IOMemory>();
-    reg = make_shared<RISCV32_REG>();
     decoder = make_shared<RISCV32_Decoder>();
     cpu = make_shared<RISCV32_CPU>();
     args = make_unique<Args>();

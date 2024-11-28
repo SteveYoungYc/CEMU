@@ -4,6 +4,7 @@
 #include <device/dev_mgr.h>
 #include <trace.h>
 #include <riscv32/riscv32_cpu.h>
+#include <riscv32/riscv32_decode.h>
 
 class Simulator
 {
@@ -12,7 +13,6 @@ private:
 
 public:
     std::shared_ptr<RISCV32_CPU> cpu;
-    std::shared_ptr<RISCV32_REG> reg;
     std::shared_ptr<RISCV32_Decoder> decoder;
 
     std::unique_ptr<NormalMemory> memory;

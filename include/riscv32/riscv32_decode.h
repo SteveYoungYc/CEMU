@@ -4,7 +4,6 @@
 #include <common.h>
 #include <cpu.h>
 #include <decoder.h>
-#include <riscv32/reg.h>
 #include <log.h>
 
 #define def_DopHelper(name) void concat(decode_op_, name)(Operand * op, word_t val, bool flag)
@@ -299,39 +298,13 @@ private:
     }
 
     // System instruction
-    inline void op_ecall()
-    {
-        GetReg()->mepc = pc;
-        GetReg()->mcause = 8;
-        rtl_j(GetReg()->mtvec);
-    }
-    inline void op_mret()
-    {
-        rtl_j(GetReg()->mepc);
-    }
+    void op_ecall();
+    void op_mret();
 
     // CSR
-    inline void op_csrrw()
-    {
-        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
-        *regs0 = *regAddr;
-        *regAddr = *dsrc1;
-        *ddest = *regs0;
-    }
-    inline void op_csrrs()
-    {
-        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
-        *regs0 = *regAddr;
-        *regAddr |= *dsrc1;
-        *ddest = *regs0;
-    }
-    inline void op_csrrc()
-    {
-        word_t *regAddr = GetReg()->GetCSRRegister(id_src2->imm);
-        *regs0 = *regAddr;
-        *regAddr &= ~(*dsrc1);
-        *ddest = *regs0;
-    }
+    void op_csrrw();
+    void op_csrrs();
+    void op_csrrc();
 
     // CEMU trap
     inline void op_trap()
@@ -341,7 +314,6 @@ private:
     }
 
     void HandleFTrace(uint32_t addr);
-    std::shared_ptr<RISCV32_REG> GetReg();
     std::shared_ptr<ICpu> GetBaseCPU();
 
 public:

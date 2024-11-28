@@ -11,8 +11,8 @@ private:
 
 public:
     std::shared_ptr<RISCV32_CPU> cpu;
-    std::unique_ptr<NormalMemory> memory;
-    std::unique_ptr<IOMemory> ioMem;
+    std::shared_ptr<NormalMemory> memory;
+    std::shared_ptr<IOMemory> ioMem;
 
     SimStatus simStatus;
 

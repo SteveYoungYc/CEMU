@@ -76,7 +76,13 @@ public:
     MemRegion *IOMap(Device *device, const char *name, paddr_t pa, uint32_t len);
 };
 
+std::shared_ptr<NormalMemory> GetMemory();
+std::shared_ptr<IOMemory> GetIOMemory();
 word_t PhysicalRead(paddr_t pa, uint32_t len);
+word_t MemPhysicalRead(paddr_t pa, uint32_t len);
+word_t IOPhysicalRead(paddr_t pa, uint32_t len);
 void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
+void MemPhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
+void IOPhysicalWrite(paddr_t pa, uint64_t data, uint32_t len);
 
 #endif

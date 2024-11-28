@@ -1,5 +1,5 @@
 #include <device/keyboard.h>
-#include <simulator.h>
+#include <memory.h>
 #include <SDL2/SDL.h>
 
 #define _KEYS(f) \
@@ -61,8 +61,8 @@ void send_key(uint8_t scancode, bool is_keydown)
 
 void KeyBoard::Init()
 {
-    MemRegion *region = simulator.ioMem->IOMap(this, "KeyBoard", simulator.ioMem->IOBase + KEYBAORD_OFFSET, 4);
-    region->space = simulator.ioMem->GetBasePtr() + KEYBAORD_OFFSET;
+    MemRegion *region = GetIOMemory()->IOMap(this, "KeyBoard", GetIOMemory()->IOBase + KEYBAORD_OFFSET, 4);
+    region->space = GetIOMemory()->GetBasePtr() + KEYBAORD_OFFSET;
     regions.emplace_back(region);
     callbacks.emplace_back(static_cast<CallbackFunc>(&KeyBoard::Callback));
 

@@ -1,7 +1,6 @@
-#include <memory.h>
-#include <log.h>
 #include <device.h>
-#include <simulator.h>
+#include <log.h>
+#include <memory.h>
 
 Memory::Memory()
 {
@@ -75,7 +74,6 @@ void Memory::HostWrite64(uint8_t *ptr, uint64_t data)
     *(uint64_t *)ptr = data;
 }
 
-
 bool Memory::IsValidPA(paddr_t pa)
 {
     return (pa >= base) && (pa < (base + size));
@@ -119,13 +117,21 @@ word_t Memory::PhysicalRead(paddr_t pa, uint32_t len)
 {
     switch (len)
     {
-        case 1: return PhysicalRead08(pa); break;
-        case 2: return PhysicalRead16(pa); break;
-        case 4: return PhysicalRead32(pa); break;
-        case 8: return PhysicalRead64(pa); break;
-        default:
-            assert(0);
-            return 0;
+    case 1:
+        return PhysicalRead08(pa);
+        break;
+    case 2:
+        return PhysicalRead16(pa);
+        break;
+    case 4:
+        return PhysicalRead32(pa);
+        break;
+    case 8:
+        return PhysicalRead64(pa);
+        break;
+    default:
+        assert(0);
+        return 0;
     }
 }
 
@@ -133,7 +139,6 @@ word_t Memory::VirtualRead(paddr_t pa, uint32_t len)
 {
     return PhysicalRead(pa, len);
 }
-
 
 void Memory::PhysicalWrite08(paddr_t pa, uint8_t data)
 {
@@ -163,12 +168,20 @@ void Memory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
     switch (len)
     {
-        case 1: PhysicalWrite08(pa, data); break;
-        case 2: PhysicalWrite16(pa, data); break;
-        case 4: PhysicalWrite32(pa, data); break;
-        case 8: PhysicalWrite64(pa, data); break;
-        default:
-            assert(0);
+    case 1:
+        PhysicalWrite08(pa, data);
+        break;
+    case 2:
+        PhysicalWrite16(pa, data);
+        break;
+    case 4:
+        PhysicalWrite32(pa, data);
+        break;
+    case 8:
+        PhysicalWrite64(pa, data);
+        break;
+    default:
+        assert(0);
     }
 }
 
@@ -176,7 +189,6 @@ void Memory::VirtualWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
     PhysicalWrite(pa, data, len);
 }
-
 
 void NormalMemory::Init()
 {
@@ -201,7 +213,6 @@ word_t IOMemory::PhysicalRead(paddr_t pa, uint32_t len)
     return Memory::PhysicalRead(pa, len);
 }
 
-
 void IOMemory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 {
     Memory::PhysicalWrite(pa, data, len);
@@ -213,34 +224,4 @@ void IOMemory::PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
 MemRegion *IOMemory::IOMap(Device *device, const char *name, paddr_t pa, uint32_t len)
 {
     return ioMap.AddMap(device, name, pa, pa + len);
-}
-
-word_t PhysicalRead(paddr_t pa, uint32_t len)
-{
-    if (likely(simulator.memory->IsValidPA(pa)))
-    {
-        return simulator.memory->PhysicalRead(pa, len);
-    }
-    if (likely(simulator.ioMem->IsValidPA(pa)))
-    {
-        return simulator.ioMem->PhysicalRead(pa, len);
-    }
-    InfoPrint("Invalid PA=0x%x\n", pa);
-    assert(0);
-}
-
-void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
-{
-    if (likely(simulator.memory->IsValidPA(pa)))
-    {
-        simulator.memory->PhysicalWrite(pa, data, len);
-        return;
-    }
-    if (likely(simulator.ioMem->IsValidPA(pa)))
-    {
-        simulator.ioMem->PhysicalWrite(pa, data, len);
-        return;
-    }
-    InfoPrint("Invalid PA=0x%x, data=0x%x\n", pa, data);
-    assert(0);
 }

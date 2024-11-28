@@ -2,7 +2,7 @@
 #define __DECODER_H__
 
 #include <trace.h>
-#include <common.h>
+#include <memory.h>
 #include <rtl.h>
 
 #define id_src1 (&src1)

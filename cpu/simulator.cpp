@@ -22,8 +22,8 @@ Simulator::~Simulator()
 
 void Simulator::Init()
 {
-    memory = make_unique<NormalMemory>();
-    ioMem = make_unique<IOMemory>();
+    memory = make_shared<NormalMemory>();
+    ioMem = make_shared<IOMemory>();
     cpu = make_shared<RISCV32_CPU>();
 
     memory->Init();
@@ -110,3 +110,90 @@ void signalHandler(int signal)
     simulator.cpu->decoder->ftrace->Print();
     exit(0);
 }
+
+std::shared_ptr<NormalMemory> GetMemory()
+{
+    return simulator.memory;
+}
+
+std::shared_ptr<IOMemory> GetIOMemory()
+{
+    return simulator.ioMem;
+}
+
+word_t PhysicalRead(paddr_t pa, uint32_t len)
+{
+    if (likely(simulator.memory->IsValidPA(pa)))
+    {
+        return simulator.memory->PhysicalRead(pa, len);
+    }
+    if (likely(simulator.ioMem->IsValidPA(pa)))
+    {
+        return simulator.ioMem->PhysicalRead(pa, len);
+    }
+    InfoPrint("Invalid PA=0x%x\n", pa);
+    assert(0);
+}
+
+word_t MemPhysicalRead(paddr_t pa, uint32_t len)
+{
+    if (likely(simulator.memory->IsValidPA(pa)))
+    {
+        return simulator.memory->PhysicalRead(pa, len);
+    }
+    InfoPrint("Invalid memory PA=0x%x\n", pa);
+    assert(0);
+}
+
+word_t IOPhysicalRead(paddr_t pa, uint32_t len)
+{
+    if (likely(simulator.ioMem->IsValidPA(pa)))
+    {
+        return simulator.ioMem->PhysicalRead(pa, len);
+    }
+    InfoPrint("Invalid IO PA=0x%x\n", pa);
+    assert(0);
+}
+
+void PhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    if (likely(simulator.memory->IsValidPA(pa)))
+    {
+        simulator.memory->PhysicalWrite(pa, data, len);
+        return;
+    }
+    if (likely(simulator.ioMem->IsValidPA(pa)))
+    {
+        simulator.ioMem->PhysicalWrite(pa, data, len);
+        return;
+    }
+    InfoPrint("Invalid PA=0x%x, data=0x%x\n", pa, data);
+    assert(0);
+}
+
+void MemPhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    if (likely(simulator.memory->IsValidPA(pa)))
+    {
+        simulator.memory->PhysicalWrite(pa, data, len);
+    }
+    else
+    {
+        InfoPrint("Invalid memory PA=0x%x, data=0x%x\n", pa, data);
+        assert(0);
+    }
+}
+
+void IOPhysicalWrite(paddr_t pa, uint64_t data, uint32_t len)
+{
+    if (likely(simulator.ioMem->IsValidPA(pa)))
+    {
+        simulator.ioMem->PhysicalWrite(pa, data, len);
+    }
+    else
+    {
+        InfoPrint("Invalid IO PA=0x%x, data=0x%x\n", pa, data);
+        assert(0);
+    }
+}
+

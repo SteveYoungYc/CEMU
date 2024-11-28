@@ -1,7 +1,7 @@
 #ifndef __RTL_H__
 #define __RTL_H__
 
-#include <memory.h>
+#include <common.h>
 
 // relation operation
 enum {

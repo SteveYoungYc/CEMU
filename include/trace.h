@@ -55,6 +55,4 @@ public:
     void Print();
 };
 
-void signalHandler(int signal);
-
 #endif

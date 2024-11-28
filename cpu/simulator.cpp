@@ -3,6 +3,8 @@
 
 using namespace std;
 
+void signalHandler(int signal);
+
 static const uint32_t img [] = {
     0x800002b7,  // lui t0,0x80000
     0x0002a023,  // sw  zero,0(t0)
@@ -29,8 +31,6 @@ void Simulator::Init()
     cpu->Init();
 
     signal(SIGABRT, signalHandler);
-    itrace.Init("riscv32");
-    ftrace.Init();
 
     LoadImg();  // After memory init
 }
@@ -101,4 +101,12 @@ void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
     simStatus.status = status;
     simStatus.haltPC = haltPC;
     simStatus.retVal = retVal;
+}
+
+void signalHandler(int signal)
+{
+    InfoPrint("Got SIGABRT.\n");
+    simulator.cpu->decoder->itrace->Print();
+    simulator.cpu->decoder->ftrace->Print();
+    exit(0);
 }

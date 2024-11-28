@@ -1,6 +1,7 @@
 #ifndef __DECODER_H__
 #define __DECODER_H__
 
+#include <trace.h>
 #include <common.h>
 #include <rtl.h>
 
@@ -31,6 +32,8 @@ public:
     Operand dest, src1, src2;
 
     SimStatus *simStatus;
+    std::unique_ptr<ITrace> itrace;
+    std::unique_ptr<FTrace> ftrace;
 
     Decoder();
     virtual ~Decoder() {};

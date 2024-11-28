@@ -9,9 +9,7 @@
 #include <fcntl.h>
 #include <gelf.h>
 #include <libelf.h>
-
 #include <log.h>
-#include <simulator.h>
 #include <trace.h>
 
 using namespace std;
@@ -19,14 +17,6 @@ using namespace std;
 static llvm::MCDisassembler *gDisassembler = nullptr;
 static llvm::MCSubtargetInfo *gSTI = nullptr;
 static llvm::MCInstPrinter *gIP = nullptr;
-
-void signalHandler(int signal)
-{
-    InfoPrint("Got SIGABRT.\n");
-    simulator.itrace.Print();
-    simulator.ftrace.Print();
-    exit(0);
-}
 
 void ITrace::Init(const char *triple)
 {

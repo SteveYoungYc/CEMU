@@ -10,8 +10,6 @@ RISCV32_Decoder::RISCV32_Decoder()
 
 void RISCV32_Decoder::HandleFTrace(uint32_t addr)
 {
-    FTrace *ftrace = &simulator.ftrace;
-
     if (info->inst.val == 0x00008067)   // ret
     {
         ftrace->Return();

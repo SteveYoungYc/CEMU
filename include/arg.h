@@ -4,24 +4,22 @@
 #include <common.h>
 #include <getopt.h>
 
-enum ArgType {
-    SIMPLE,
-    UNSIGN,
-    LAST
-};
-
-struct ArgEntry
-{
-    const char *name;
-    const char *description;
-    const enum ArgType type;
-};
-
-
 class Args
 {
+private:
+    bool screenEnabled = false;
+    Args() = default;
+    ~Args() = default;
 
 public:
+    static Args &Instance()
+    {
+        static Args instance;
+        return instance;
+    }
+    Args(const Args &) = delete;
+    Args &operator=(const Args &) = delete;
+
     static const struct option table[];
 
     const char *imgFile = nullptr;

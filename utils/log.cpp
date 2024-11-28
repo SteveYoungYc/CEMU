@@ -1,5 +1,4 @@
 #include <log.h>
-#include <simulator.h>
 
 Logger::~Logger()
 {
@@ -11,11 +10,11 @@ Logger::~Logger()
 
 void Logger::Init()
 {
-    isDebug = simulator.args->isDebug;
+    isDebug = Args::Instance().isDebug;
     logFile = nullptr;
-    if (simulator.args->logFile != nullptr)
+    if (Args::Instance().logFile != nullptr)
     {
-        logFile = fopen(simulator.args->logFile, "a");
+        logFile = fopen(Args::Instance().logFile, "a");
         if (logFile == nullptr)
         {
             printf("Error opening log file.\n");

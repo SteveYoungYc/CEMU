@@ -165,7 +165,7 @@ char *Debugger::ReadLine()
 
 void Debugger::Init()
 {
-    mode = simulator.args->isBatch ? Mode::Batch : Mode::Debug;
+    mode = Args::Instance().isBatch ? Mode::Batch : Mode::Debug;
     expr.Init();
 }
 

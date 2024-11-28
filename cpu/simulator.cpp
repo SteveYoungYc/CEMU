@@ -1,4 +1,5 @@
 #include <simulator.h>
+#include <device/dev_mgr.h>
 
 using namespace std;
 
@@ -17,30 +18,26 @@ Simulator::~Simulator()
 {
 }
 
-void Simulator::Init(int argc, char *argv[])
+void Simulator::Init()
 {
     memory = make_unique<NormalMemory>();
     ioMem = make_unique<IOMemory>();
     cpu = make_shared<RISCV32_CPU>();
-    args = make_unique<Args>();
-    devManager = make_unique<DeviceManager>();
 
-    args->ParseArgs(argc, argv);
-    imgFile = args->imgFile;
     memory->Init();
     ioMem->Init();
     cpu->Init();
-    devManager->Init();
 
     signal(SIGABRT, signalHandler);
     itrace.Init("riscv32");
     ftrace.Init();
 
-    LoadImg();
+    LoadImg();  // After memory init
 }
 
 long Simulator::LoadImg()
 {
+    imgFile = Args::Instance().imgFile;
     if (imgFile == NULL)
     {
         InfoPrint("No image is given. Use the default build-in image.\n");
@@ -77,7 +74,7 @@ void Simulator::Run(uint64_t n)
         if (simStatus.status != RUNNING)
             break;
         cpu->pc = cpu->decoder->dnpc;
-        devManager->Update();
+        DeviceManager::Instance().Update();
     }
 
     switch (simStatus.status)
@@ -104,9 +101,4 @@ void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
     simStatus.status = status;
     simStatus.haltPC = haltPC;
     simStatus.retVal = retVal;
-}
-
-ITrace *Simulator::GetITrace()
-{
-    return &itrace;
 }

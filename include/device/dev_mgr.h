@@ -12,7 +12,17 @@ class DeviceManager
 {
 private:
     bool screenEnabled = false;
+    DeviceManager() = default;
+    ~DeviceManager() = default;
 public:
+    static DeviceManager &Instance()
+    {
+        static DeviceManager instance;
+        return instance;
+    }
+    DeviceManager(const DeviceManager &) = delete;
+    DeviceManager &operator=(const DeviceManager &) = delete;
+
     Serial serial;
     Timer timer;
 #ifdef HAS_SCREEN_KEYBOARD

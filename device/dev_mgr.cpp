@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-#include <simulator.h>
 #include <device/dev_mgr.h>
 
 #define TIMER_HZ 60

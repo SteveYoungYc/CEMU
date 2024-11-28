@@ -315,7 +315,6 @@ private:
     }
 
     void HandleFTrace(uint32_t addr);
-    std::shared_ptr<ICpu> GetBaseCPU();
 
 public:
     RISCV32_Decoder();

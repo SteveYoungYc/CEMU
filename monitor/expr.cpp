@@ -1,7 +1,7 @@
 #include <cstring>
+#include <cpu.h>
 #include <expr.h>
 #include <memory.h>
-#include <simulator.h>
 #include <log.h>
 
 #define NR_REGEX ARRLEN(Expression::rules)
@@ -193,7 +193,7 @@ int Expression::Calculate(int p, int q)
             val = strtol(tokens[p].str, NULL, 16);
             break;
         case TK_REG:
-            val = simulator.cpu->RegStrToVal(tokens[p].str, &success);
+            val = GetCPU()->RegStrToVal(tokens[p].str, &success);
             if (!success)
             {
                 if (strcmp(tokens[p].str, "pc") != 0)
@@ -201,7 +201,7 @@ int Expression::Calculate(int p, int q)
                     InfoPrint("[invalid] cannot find reg\n");
                     return -1;
                 }
-                val = simulator.cpu->pc;
+                val = GetCPU()->pc;
             }
             break;
         case TK_DEREF:

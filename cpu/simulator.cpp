@@ -80,12 +80,11 @@ void Simulator::Run(uint64_t n)
     switch (simStatus.status)
     {
     case CEMU_Status::RUNNING:
-        simStatus.status = CEMU_Status::STOP;
         break;
-    case STOP:
-    case END:
-    case ABORT:
-    case QUIT:
+    case CEMU_Status::STOP:
+    case CEMU_Status::END:
+    case CEMU_Status::ABORT:
+    case CEMU_Status::QUIT:
         if (simStatus.retVal != 0)
         {
             InfoPrint("Fuck! ret=0x%x\n", simStatus.retVal);
@@ -111,12 +110,22 @@ void signalHandler(int signal)
     exit(0);
 }
 
-std::shared_ptr<NormalMemory> GetMemory()
+SimStatus *GetStatus()
+{
+    return &simulator.simStatus;
+}
+
+shared_ptr<ICpu> GetCPU()
+{
+    return simulator.cpu;
+}
+
+shared_ptr<NormalMemory> GetMemory()
 {
     return simulator.memory;
 }
 
-std::shared_ptr<IOMemory> GetIOMemory()
+shared_ptr<IOMemory> GetIOMemory()
 {
     return simulator.ioMem;
 }

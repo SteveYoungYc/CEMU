@@ -23,11 +23,6 @@ void RISCV32_Decoder::HandleFTrace(uint32_t addr)
     }
 }
 
-shared_ptr<ICpu> RISCV32_Decoder::GetBaseCPU()
-{
-    return simulator.cpu;
-}
-
 static def_DopHelper(i)
 {
     op->imm = val;

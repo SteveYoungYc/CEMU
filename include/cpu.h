@@ -22,4 +22,6 @@ public:
     virtual void DecodeAndExecute() {}
 };
 
+std::shared_ptr<ICpu> GetCPU();
+
 #endif

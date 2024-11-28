@@ -1,11 +1,12 @@
 #include <decoder.h>
-#include <simulator.h>
 
 using namespace std;
 
+SimStatus *GetStatus();
+
 Decoder::Decoder()
 {
-    simStatus = &simulator.simStatus;
+    simStatus = GetStatus();
     itrace = make_unique<ITrace>();
     ftrace = make_unique<FTrace>();
     itrace->Init("riscv32");

@@ -13,7 +13,6 @@ private:
 
 public:
     std::shared_ptr<RISCV32_CPU> cpu;
-    std::shared_ptr<RISCV32_Decoder> decoder;
 
     std::unique_ptr<NormalMemory> memory;
     std::unique_ptr<IOMemory> ioMem;

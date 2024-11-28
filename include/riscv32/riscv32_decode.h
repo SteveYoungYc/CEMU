@@ -145,8 +145,9 @@ private:
     static InstEntry cemu_trap[];
 
     static DecoderFunc decoderTable[];
-
     static InstEntry systemInst[];
+
+    std::unique_ptr<RISCV32_DecodeInfo> info;
 
     void decode_R(int width);
     void decode_I(int width);
@@ -317,10 +318,10 @@ private:
     std::shared_ptr<ICpu> GetBaseCPU();
 
 public:
-    std::unique_ptr<RISCV32_DecodeInfo> info;
-
     RISCV32_Decoder();
     uint32_t DecodeAndExecute() override;
+    uint32_t GetInstVal() override;
+    void SetInstVal(uint32_t val) override;
 };
 
 #endif

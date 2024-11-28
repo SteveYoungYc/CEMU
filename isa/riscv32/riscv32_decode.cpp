@@ -257,6 +257,16 @@ void RISCV32_Decoder::op_csrrc()
     *ddest = *regs0;
 }
 
+uint32_t RISCV32_Decoder::GetInstVal()
+{
+    return info->inst.val;
+}
+
+void RISCV32_Decoder::SetInstVal(uint32_t val)
+{
+    info->inst.val = val;
+}
+
 uint32_t RISCV32_Decoder::DecodeAndExecute()
 {
     for (auto sysInst : systemInst)

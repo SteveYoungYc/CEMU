@@ -35,6 +35,8 @@ public:
     Decoder();
     virtual ~Decoder() {};
 
+    virtual uint32_t GetInstVal() = 0;
+    virtual void SetInstVal(uint32_t val) = 0;
     virtual uint32_t DecodeAndExecute() = 0;
 
     def_rtl_compute_reg_imm(add)

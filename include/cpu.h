@@ -2,16 +2,16 @@
 #define __CPU_H__
 
 #include <common.h>
+#include <decoder.h>
 
 class ICpu
-{
-private:
-
+{   
 public:
     vaddr_t pc;
     const rtlreg_t rzero = 0;
     rtlreg_t tmp_reg[4];
-    
+    std::unique_ptr<Decoder> decoder;
+
     virtual ~ICpu() {};
 
     uint32_t Fetch(vaddr_t *pc);

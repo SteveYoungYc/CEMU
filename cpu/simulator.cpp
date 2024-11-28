@@ -21,7 +21,6 @@ void Simulator::Init(int argc, char *argv[])
 {
     memory = make_unique<NormalMemory>();
     ioMem = make_unique<IOMemory>();
-    decoder = make_shared<RISCV32_Decoder>();
     cpu = make_shared<RISCV32_CPU>();
     args = make_unique<Args>();
     devManager = make_unique<DeviceManager>();
@@ -30,7 +29,7 @@ void Simulator::Init(int argc, char *argv[])
     imgFile = args->imgFile;
     memory->Init();
     ioMem->Init();
-    cpu->Reset();
+    cpu->Init();
     devManager->Init();
 
     signal(SIGABRT, signalHandler);
@@ -72,12 +71,12 @@ void Simulator::Run(uint64_t n)
 {
     for (; n > 0; n--)
     {
-        decoder->pc = cpu->pc;
-        decoder->snpc = cpu->pc;
+        cpu->decoder->pc = cpu->pc;
+        cpu->decoder->snpc = cpu->pc;
         cpu->Run();
         if (simStatus.status != RUNNING)
             break;
-        cpu->pc = decoder->dnpc;
+        cpu->pc = cpu->decoder->dnpc;
         devManager->Update();
     }
 

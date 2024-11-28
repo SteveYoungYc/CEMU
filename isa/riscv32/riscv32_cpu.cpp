@@ -1,5 +1,8 @@
 #include <cstring>
-#include <simulator.h>
+#include <riscv32/riscv32_cpu.h>
+#include <riscv32/riscv32_decode.h>
+
+using namespace std;
 
 const char *RISCV32_CPU::regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -7,6 +10,12 @@ const char *RISCV32_CPU::regs[] = {
     "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
     "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
+
+void RISCV32_CPU::Init()
+{
+    decoder = make_unique<RISCV32_Decoder>();
+    Reset();
+}
 
 void RISCV32_CPU::Reset()
 {
@@ -16,13 +25,13 @@ void RISCV32_CPU::Reset()
 
 void RISCV32_CPU::Run()
 {
-    simulator.decoder->info->inst.val = Fetch(&simulator.decoder->snpc);
+    decoder->SetInstVal(Fetch(&decoder->snpc));
     DecodeAndExecute();
 }
 
 void RISCV32_CPU::DecodeAndExecute()
 {
-    if(simulator.decoder->DecodeAndExecute())
+    if(decoder->DecodeAndExecute())
     {
         assert(!"Instruction not supported");
     }

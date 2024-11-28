@@ -19,6 +19,8 @@ public:
     word_t mtval;
     word_t misa;
 
+    void Init();
+
     inline word_t *GetReg(uint32_t idx)
     {
         assert(idx >= 0 && idx < 32);

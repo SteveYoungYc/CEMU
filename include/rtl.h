@@ -1,7 +1,6 @@
 #ifndef __RTL_H__
 #define __RTL_H__
 
-#include <cpu.h>
 #include <memory.h>
 
 // relation operation

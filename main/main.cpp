@@ -6,11 +6,11 @@
 #include <device/dev_mgr.h>
 
 Simulator simulator;
-Debugger sdb;
 Logger cemuLog;
 
 int main(int argc, char *argv[])
 {
+    Debugger sdb;
     simulator.Init(argc, argv);
     cemuLog.Init();
     sdb.Init();

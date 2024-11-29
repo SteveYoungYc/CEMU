@@ -1,3 +1,4 @@
+#include <limits>
 #include <riscv32/riscv32_decode.h>
 #include <simulator.h>
 
@@ -6,6 +7,43 @@ using namespace std;
 RISCV32_Decoder::RISCV32_Decoder()
 {
     info = make_unique<RISCV32_DecodeInfo>();
+}
+
+bool RISCV32_Decoder::HandleDiv(bool isUnsigned)
+{
+    if (*dsrc2 == 0)
+    {
+        if (isUnsigned)
+        {
+            *ddest = numeric_limits<uint32_t>::max();
+        }
+        else
+        {
+            *ddest = -1;
+        }
+        return false;
+    }
+    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
+    {
+        *ddest = numeric_limits<int32_t>::min();
+        return false;
+    }
+    return true;
+}
+
+bool RISCV32_Decoder::HandleRem(bool isUnsigned)
+{
+    if (*dsrc2 == 0)
+    {
+        *ddest = *dsrc1;
+        return false;
+    }
+    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
+    {
+        *ddest = 0;
+        return false;
+    }
+    return true;
 }
 
 void RISCV32_Decoder::HandleFTrace(uint32_t addr)

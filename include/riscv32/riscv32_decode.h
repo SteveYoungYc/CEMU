@@ -191,7 +191,7 @@ private:
     }
     inline void op_mulsu()
     {
-        InfoPrint("mulsu\n");
+        rtl_mulsu_hi(ddest, dsrc1, dsrc2);
     }
     inline void op_mulu()
     {
@@ -199,19 +199,31 @@ private:
     }
     inline void op_div()
     {
-        rtl_divs_q(ddest, dsrc1, dsrc2);
+        if (HandleDiv(false))
+        {
+            rtl_divs_q(ddest, dsrc1, dsrc2);
+        }
     }
     inline void op_divu()
     {
-        rtl_divu_q(ddest, dsrc1, dsrc2);
+        if (HandleDiv(true))
+        {
+            rtl_divu_q(ddest, dsrc1, dsrc2);
+        }
     }
     inline void op_rem()
     {
-        rtl_divs_r(ddest, dsrc1, dsrc2);
+        if (HandleRem(false))
+        {
+            rtl_divs_r(ddest, dsrc1, dsrc2);
+        }
     }
     inline void op_remu()
     {
-        rtl_divu_r(ddest, dsrc1, dsrc2);
+        if (HandleRem(true))
+        {
+            rtl_divu_r(ddest, dsrc1, dsrc2);
+        }
     }
 
     // Load
@@ -314,6 +326,8 @@ private:
         rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->imm >> 12);
     }
 
+    bool HandleDiv(bool isUnsigned);
+    bool HandleRem(bool isUnsigned);
     void HandleFTrace(uint32_t addr);
 
 public:

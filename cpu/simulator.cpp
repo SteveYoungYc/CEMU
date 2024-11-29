@@ -104,7 +104,7 @@ void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
 
 void signalHandler(int signal)
 {
-    InfoPrint("Got SIGABRT.\n");
+    InfoPrint("CEMU crashed.\n");
     simulator.cpu->decoder->itrace->Print();
     simulator.cpu->decoder->ftrace->Print();
     exit(0);

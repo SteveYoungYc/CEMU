@@ -84,9 +84,10 @@ static inline bool InterpretRelop(uint32_t relop, const rtlreg_t src1, const rtl
 #define c_sltu(a, b)   (((word_t)(a) < (word_t)(b)) ? 1 : 0)
 #define c_sext(a, num) (((sword_t)a << num) >> num)
 
-#define c_mulu_lo(a, b) ((a) * (b))
-#define c_mulu_hi(a, b) (((uint64_t)(a) * (uint64_t)(b)) >> 32)
-#define c_muls_hi(a, b) (((int64_t)(sword_t)(a) * (int64_t)(sword_t)(b)) >> 32)
+#define c_mulu_lo(a, b)  ((a) * (b))
+#define c_mulu_hi(a, b)  (((uint64_t)(a) * (uint64_t)(b)) >> 32)
+#define c_muls_hi(a, b)  (((int64_t)(sword_t)(a) * (int64_t)(sword_t)(b)) >> 32)
+#define c_mulsu_hi(a, b) (((int64_t)(sword_t)(a) * (uint64_t)(b)) >> 32)
 
 #define c_divu_q(a, b) ((a) / (b))
 #define c_divu_r(a, b) ((a) % (b))

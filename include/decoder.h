@@ -56,6 +56,7 @@ public:
     def_rtl_compute_reg(mulu_lo)
     def_rtl_compute_reg(mulu_hi)
     def_rtl_compute_reg(muls_hi)
+    def_rtl_compute_reg(mulsu_hi)
     def_rtl_compute_reg(divu_q)
     def_rtl_compute_reg(divu_r)
     def_rtl_compute_reg(divs_q)

@@ -19,7 +19,7 @@
 #define def_op_compute_imm(name)                           \
     inline def_op(name##i)                                 \
     {                                                      \
-        concat(rtl_, name##i)(ddest, dsrc1, id_src2->imm); \
+        concat(rtl_, name##i)(ddest, dsrc1, id_src2->simm); \
     }
 
 enum InstKind
@@ -47,8 +47,8 @@ struct OpcodeEntry
 {
     const uint32_t pattern;
     const uint32_t mask;
-    InstKind kind;
-    InstEntry *instPtr;
+    const InstKind kind;
+    const InstEntry *instPtr;
 };
 
 class RISCV32_DecodeInfo : public IDecodeInfo
@@ -131,21 +131,21 @@ private:
     static const uint32_t jumpMask   = 0b00000000000000000111000000000000;
     static const uint32_t csrMask    = 0b00000000000000000111000000000000;
 
-    static OpcodeEntry opcodeTable[];
-    static InstEntry cal[];
-    static InstEntry lui[];
-    static InstEntry load[];
-    static InstEntry jump[];
-    static InstEntry store[];
-    static InstEntry imm[];
-    static InstEntry branch[];
-    static InstEntry auipc[];
-    static InstEntry jal[];
-    static InstEntry csr[];
-    static InstEntry cemu_trap[];
+    static const OpcodeEntry opcodeTable[];
+    static const InstEntry systemInst[];
+    static const InstEntry cal[];
+    static const InstEntry lui[];
+    static const InstEntry load[];
+    static const InstEntry jump[];
+    static const InstEntry store[];
+    static const InstEntry imm[];
+    static const InstEntry branch[];
+    static const InstEntry auipc[];
+    static const InstEntry jal[];
+    static const InstEntry csr[];
+    static const InstEntry cemu_trap[];
 
-    static DecoderFunc decoderTable[];
-    static InstEntry systemInst[];
+    static const DecoderFunc decoderTable[];
 
     std::unique_ptr<RISCV32_DecodeInfo> info;
 
@@ -178,7 +178,7 @@ private:
     def_op_compute_imm(slt)
     inline void op_sltiu()
     {
-        rtl_sltui(ddest, dsrc1, id_src2->imm);
+        rtl_sltui(ddest, dsrc1, id_src2->simm);
     }
 
     inline void op_mul()
@@ -229,84 +229,84 @@ private:
     // Load
     inline void op_lb()
     {
-        rtl_lms(ddest, dsrc1, id_src2->imm, 1);
+        rtl_lms(ddest, dsrc1, id_src2->simm, 1);
     }
     inline void op_lh()
     {
-        rtl_lms(ddest, dsrc1, id_src2->imm, 2);
+        rtl_lms(ddest, dsrc1, id_src2->simm, 2);
     }
     inline void op_lw()
     {
-        rtl_lms(ddest, dsrc1, id_src2->imm, 4);
+        rtl_lms(ddest, dsrc1, id_src2->simm, 4);
     }
     inline void op_lbu()
     {
-        rtl_lm(ddest, dsrc1, id_src2->imm, 1);
+        rtl_lm(ddest, dsrc1, id_src2->simm, 1);
     }
     inline void op_lhu()
     {
-        rtl_lm(ddest, dsrc1, id_src2->imm, 2);
+        rtl_lm(ddest, dsrc1, id_src2->simm, 2);
     }
 
     // Store
     inline void op_sb()
     {
-        rtl_sm(ddest, dsrc1, id_src2->imm, 1);
+        rtl_sm(ddest, dsrc1, id_src2->simm, 1);
     }
     inline void op_sh()
     {
-        rtl_sm(ddest, dsrc1, id_src2->imm, 2);
+        rtl_sm(ddest, dsrc1, id_src2->simm, 2);
     }
     inline void op_sw()
     {
-        rtl_sm(ddest, dsrc1, id_src2->imm, 4);
+        rtl_sm(ddest, dsrc1, id_src2->simm, 4);
     }
 
     // Control
     inline void op_beq()
     {
-        rtl_jrelop(RELOP_EQ, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_EQ, dsrc1, dsrc2, pc + id_dest->simm);
     }
     inline void op_bne()
     {
-        rtl_jrelop(RELOP_NE, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_NE, dsrc1, dsrc2, pc + id_dest->simm);
     }
     inline void op_blt()
     {
-        rtl_jrelop(RELOP_LT, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_LT, dsrc1, dsrc2, pc + id_dest->simm);
     }
     inline void op_bge()
     {
-        rtl_jrelop(RELOP_GE, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_GE, dsrc1, dsrc2, pc + id_dest->simm);
     }
     inline void op_bltu()
     {
-        rtl_jrelop(RELOP_LTU, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_LTU, dsrc1, dsrc2, pc + id_dest->simm);
     }
     inline void op_bgeu()
     {
-        rtl_jrelop(RELOP_GEU, dsrc1, dsrc2, pc + id_dest->imm);
+        rtl_jrelop(RELOP_GEU, dsrc1, dsrc2, pc + id_dest->simm);
     }
 
     inline void op_jalr()
     {
         *regs0 = *dsrc1;
         *ddest = pc + 4;
-        rtl_j(*regs0 + id_src2->imm);
+        rtl_j(*regs0 + id_src2->simm);
         HandleFTrace(dnpc);
     }
     inline void op_lui()
     {
-        *ddest = id_src1->imm;
+        *ddest = id_src1->simm;
     }
     inline void op_auipc()
     {
-        *ddest = pc + id_src1->imm;
+        *ddest = pc + id_src1->simm;
     }
     inline void op_jal()
     {
         *ddest = pc + 4;
-        rtl_j(pc + id_src1->imm);
+        rtl_j(pc + id_src1->simm);
         HandleFTrace(dnpc);
     }
 
@@ -319,11 +319,16 @@ private:
     void op_csrrs();
     void op_csrrc();
 
+    // Fence
+    inline void op_fence()
+    {
+    }
+
     // CEMU trap
     inline void op_trap()
     {
         InfoPrint("CEMU Trap!\n");
-        rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->imm >> 12);
+        rtl_hostcall(HOSTCALL_EXIT, nullptr, nullptr, nullptr, id_src1->simm >> 12);
     }
 
     bool HandleDiv(bool isUnsigned);

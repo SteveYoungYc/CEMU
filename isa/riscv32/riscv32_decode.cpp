@@ -9,58 +9,6 @@ RISCV32_Decoder::RISCV32_Decoder()
     info = make_unique<RISCV32_DecodeInfo>();
 }
 
-bool RISCV32_Decoder::HandleDiv(bool isUnsigned)
-{
-    if (*dsrc2 == 0)
-    {
-        if (isUnsigned)
-        {
-            *ddest = numeric_limits<uint32_t>::max();
-        }
-        else
-        {
-            *ddest = -1;
-        }
-        return false;
-    }
-    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
-    {
-        *ddest = numeric_limits<int32_t>::min();
-        return false;
-    }
-    return true;
-}
-
-bool RISCV32_Decoder::HandleRem(bool isUnsigned)
-{
-    if (*dsrc2 == 0)
-    {
-        *ddest = *dsrc1;
-        return false;
-    }
-    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
-    {
-        *ddest = 0;
-        return false;
-    }
-    return true;
-}
-
-void RISCV32_Decoder::HandleFTrace(uint32_t addr)
-{
-    if (info->inst.val == 0x00008067)   // ret
-    {
-        ftrace->Return();
-        return;
-    }
-
-    string name = ftrace->FindFunctionByAddress(addr);
-    if (name != "")
-    {
-        ftrace->CallFucntion(name);
-    }
-}
-
 static def_DopHelper(i)
 {
     op->imm = val;
@@ -126,7 +74,7 @@ void RISCV32_Decoder::decode_B(int width)
     decode_op_i(id_dest, simm, false);
 }
 
-DecoderFunc RISCV32_Decoder::decoderTable[] = {
+const DecoderFunc RISCV32_Decoder::decoderTable[] = {
     &RISCV32_Decoder::decode_R,
     &RISCV32_Decoder::decode_I,
     &RISCV32_Decoder::decode_S,
@@ -135,7 +83,7 @@ DecoderFunc RISCV32_Decoder::decoderTable[] = {
     &RISCV32_Decoder::decode_J,
 };
 
-InstEntry RISCV32_Decoder::cal[] = {
+const InstEntry RISCV32_Decoder::cal[] = {
     {0b00000000000000000000000000000000, calMask, &RISCV32_Decoder::op_add},
     {0b01000000000000000000000000000000, calMask, &RISCV32_Decoder::op_sub},
     {0b00000000000000000100000000000000, calMask, &RISCV32_Decoder::op_xor},
@@ -157,12 +105,12 @@ InstEntry RISCV32_Decoder::cal[] = {
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::lui[] = {
+const InstEntry RISCV32_Decoder::lui[] = {
     {0, 0, &RISCV32_Decoder::op_lui},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::load[] = {
+const InstEntry RISCV32_Decoder::load[] = {
     {0b00000000000000000000000000000000, loadMask, &RISCV32_Decoder::op_lb},
     {0b00000000000000000001000000000000, loadMask, &RISCV32_Decoder::op_lh},
     {0b00000000000000000010000000000000, loadMask, &RISCV32_Decoder::op_lw},
@@ -171,14 +119,14 @@ InstEntry RISCV32_Decoder::load[] = {
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::store[] = {
+const InstEntry RISCV32_Decoder::store[] = {
     {0b00000000000000000000000000000000, storeMask, &RISCV32_Decoder::op_sb},
     {0b00000000000000000001000000000000, storeMask, &RISCV32_Decoder::op_sh},
     {0b00000000000000000010000000000000, storeMask, &RISCV32_Decoder::op_sw},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::imm[] = {
+const InstEntry RISCV32_Decoder::imm[] = {
     {0b00000000000000000000000000000000, immMask0, &RISCV32_Decoder::op_addi},
     {0b00000000000000000100000000000000, immMask0, &RISCV32_Decoder::op_xori},
     {0b00000000000000000110000000000000, immMask0, &RISCV32_Decoder::op_ori},
@@ -191,7 +139,7 @@ InstEntry RISCV32_Decoder::imm[] = {
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::branch[] = {
+const InstEntry RISCV32_Decoder::branch[] = {
     {0b00000000000000000000000000000000, branchMask, &RISCV32_Decoder::op_beq},
     {0b00000000000000000001000000000000, branchMask, &RISCV32_Decoder::op_bne},
     {0b00000000000000000100000000000000, branchMask, &RISCV32_Decoder::op_blt},
@@ -201,22 +149,22 @@ InstEntry RISCV32_Decoder::branch[] = {
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::jump[] = {
+const InstEntry RISCV32_Decoder::jump[] = {
     {0b00000000000000000000000000000000, jumpMask, &RISCV32_Decoder::op_jalr},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::auipc[] = {
+const InstEntry RISCV32_Decoder::auipc[] = {
     {0, 0, &RISCV32_Decoder::op_auipc},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::jal[] = {
+const InstEntry RISCV32_Decoder::jal[] = {
     {0, 0, &RISCV32_Decoder::op_jal},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::csr[] = {
+const InstEntry RISCV32_Decoder::csr[] = {
     {0b00000000000000000001000000000000, csrMask, &RISCV32_Decoder::op_csrrw},
     {0b00000000000000000010000000000000, csrMask, &RISCV32_Decoder::op_csrrs},
     {0b00000000000000000011000000000000, csrMask, &RISCV32_Decoder::op_csrrc},
@@ -224,18 +172,20 @@ InstEntry RISCV32_Decoder::csr[] = {
 };
 
 
-InstEntry RISCV32_Decoder::cemu_trap[] = {
+const InstEntry RISCV32_Decoder::cemu_trap[] = {
     {0, 0, &RISCV32_Decoder::op_trap},
     {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
-InstEntry RISCV32_Decoder::systemInst[] = {
+const InstEntry RISCV32_Decoder::systemInst[] = {
     {0b00000000000000000000000001110011, 0, &RISCV32_Decoder::op_ecall},
-    {0b00110000001000000000000001110011, 0, &RISCV32_Decoder::op_mret}
+    {0b00110000001000000000000001110011, 0, &RISCV32_Decoder::op_mret},
+    {0b00001111111100000000000000001111, 0, &RISCV32_Decoder::op_fence},
+    {static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), nullptr}
 };
 
 
-OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
+const OpcodeEntry RISCV32_Decoder::opcodeTable[] = {
     {0b0110011, opcodeMask, InstKind::R, cal},
     {0b0110111, opcodeMask, InstKind::U, lui},
     {0b0000011, opcodeMask, InstKind::I, load},
@@ -288,6 +238,58 @@ void RISCV32_Decoder::op_csrrc()
     *ddest = *regs0;
 }
 
+bool RISCV32_Decoder::HandleDiv(bool isUnsigned)
+{
+    if (*dsrc2 == 0)
+    {
+        if (isUnsigned)
+        {
+            *ddest = numeric_limits<uint32_t>::max();
+        }
+        else
+        {
+            *ddest = -1;
+        }
+        return false;
+    }
+    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
+    {
+        *ddest = numeric_limits<int32_t>::min();
+        return false;
+    }
+    return true;
+}
+
+bool RISCV32_Decoder::HandleRem(bool isUnsigned)
+{
+    if (*dsrc2 == 0)
+    {
+        *ddest = *dsrc1;
+        return false;
+    }
+    if (!isUnsigned && (sword_t)(*dsrc1) == numeric_limits<int32_t>::min() && (sword_t)(*dsrc2) == -1)
+    {
+        *ddest = 0;
+        return false;
+    }
+    return true;
+}
+
+void RISCV32_Decoder::HandleFTrace(uint32_t addr)
+{
+    if (info->inst.val == 0x00008067)   // ret
+    {
+        ftrace->Return();
+        return;
+    }
+
+    string name = ftrace->FindFunctionByAddress(addr);
+    if (name != "")
+    {
+        ftrace->CallFucntion(name);
+    }
+}
+
 uint32_t RISCV32_Decoder::GetInstVal()
 {
     return info->inst.val;
@@ -309,13 +311,13 @@ uint32_t RISCV32_Decoder::DecodeAndExecute()
             return 0;
         }
     }
-    for (OpcodeEntry *opEntry = opcodeTable; opEntry->instPtr != nullptr; opEntry++)
+    for (const OpcodeEntry *opEntry = opcodeTable; opEntry->instPtr != nullptr; opEntry++)
     {
         uint32_t masked = info->inst.val & opEntry->mask;
         if (masked == opEntry->pattern)
         {
-            InstEntry *instTable = opEntry->instPtr;
-            for (InstEntry *instEntry = instTable; instEntry->InstExe != nullptr; instEntry++)
+            const InstEntry *instTable = opEntry->instPtr;
+            for (const InstEntry *instEntry = instTable; instEntry->InstExe != nullptr; instEntry++)
             {
                 uint32_t masked = info->inst.val & instEntry->mask;
                 if (masked == instEntry->pattern)
@@ -326,10 +328,10 @@ uint32_t RISCV32_Decoder::DecodeAndExecute()
                     return 0;
                 }
             }
-            InfoPrint("No instrunction found. (0x%x)\n", info->inst.val);
+            InfoPrint("No instrunction found. (0x%x at 0x%x)\n", info->inst.val, pc);
             return 1;
         }
     }
-    InfoPrint("No opcode found. (0x%x)\n", info->inst.val);
+    InfoPrint("No opcode found. (0x%x at 0x%x)\n", info->inst.val, pc);
     return 1;
 }

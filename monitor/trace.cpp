@@ -64,7 +64,7 @@ void ITrace::Init(const char *triple)
     gIP->setPrintImmHex(true);
     gIP->setPrintBranchImmAsAddress(true);
 
-    mode = ITraceMode::FailedInst;
+    mode = ITraceMode::AllInst;
 }
 
 void ITrace::DoDisassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte)

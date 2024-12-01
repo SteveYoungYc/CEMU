@@ -23,8 +23,56 @@ void RISCV32_CPU::Reset()
     gpr[0] = 0;
 }
 
+union CJALInstruction {
+    uint16_t raw; // 原始 16 位指令
+    struct {
+        uint16_t opcode : 2;    // [1:0]   操作码
+        uint16_t offset5 : 1;
+        uint16_t offset3_1 : 3;
+        uint16_t offset7 : 1;
+        uint16_t offset6 : 1;
+        uint16_t offset10 : 1;
+        uint16_t offset9_8 : 2;
+        uint16_t offset4 : 1;
+        uint16_t offset11 : 1;
+        uint16_t funct3 : 3;    // [15:13] 功能码
+    } fields;
+};
+
+int16_t decodeCJAL(uint16_t instr, bool &isCJAL)
+{
+    CJALInstruction inst;
+    inst.raw = instr;
+
+    if (inst.fields.opcode == 0b01 && inst.fields.funct3 == 0b001)
+    {
+        isCJAL = true;
+
+        int16_t imm = (inst.fields.offset5 << 5) + 
+                        (inst.fields.offset3_1 << 1) + 
+                        (inst.fields.offset7 << 7) + 
+                        (inst.fields.offset6 << 6) + 
+                        (inst.fields.offset10 << 10) + 
+                        (inst.fields.offset9_8 << 8) + 
+                        (inst.fields.offset4 << 4) + 
+                        (inst.fields.offset11 << 11);
+        return imm;
+    }
+
+    isCJAL = false;
+    return 0;
+}
+
 void RISCV32_CPU::Run()
 {
+    uint16_t instVal16 = MemPhysicalRead(decoder->snpc, sizeof(uint16_t));
+    bool isCompressed;
+    int16_t offset = decodeCJAL(instVal16, isCompressed);
+    if (isCompressed)
+    {
+        decoder->dnpc += offset;
+        return;
+    }
     decoder->SetInstVal(Fetch(&decoder->snpc));
     DecodeAndExecute();
 }

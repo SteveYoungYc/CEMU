@@ -20,7 +20,6 @@ typedef union
 
 struct Decoder
 {
-    vaddr_t pc;
     vaddr_t snpc; // static next pc
     vaddr_t dnpc; // dynamic next pc
     Operand dest, src1, src2;
@@ -146,7 +145,7 @@ protected:
 
     inline def_rtl(jr, rtlreg_t *target)
     {
-        decoder->dnpc = *target;
+        decoder->dnpc = ROUND_DOWN(*target, 4);
     }
 
     inline def_rtl(jrelop, uint32_t relop, const rtlreg_t *src1, const rtlreg_t *src2, vaddr_t target)

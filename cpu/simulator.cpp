@@ -68,7 +68,6 @@ void Simulator::Run(uint64_t n)
 {
     for (; n > 0; n--)
     {
-        cpu->decoder->pc = cpu->pc;
         cpu->decoder->snpc = cpu->pc;
         cpu->Run();
         if (simStatus.status != RUNNING)

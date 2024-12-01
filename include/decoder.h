@@ -153,7 +153,7 @@ public:
 
     inline def_rtl(j, vaddr_t target)
     {
-        dnpc = target;
+        dnpc = ROUND_DOWN(target, 4);
     }
 
     inline def_rtl(jr, rtlreg_t *target)

@@ -309,8 +309,9 @@ private:
     inline void op_jalr()
     {
         *regs0 = *dsrc1;
-        *ddest = pc + 4;
-        rtl_j(*regs0 + id_src2->simm);
+        rtl_addi(ddest, &pc, 4);
+        rtl_addi(regs0, regs0, id_src2->simm);
+        rtl_jr(regs0);
         HandleFTrace(decoder->dnpc);
     }
     inline void op_lui()
@@ -319,12 +320,13 @@ private:
     }
     inline void op_auipc()
     {
-        *ddest = pc + id_src1->simm;
+        rtl_addi(ddest, &pc, id_src1->simm);
     }
     inline void op_jal()
     {
-        *ddest = pc + 4;
-        rtl_j(pc + id_src1->simm);
+        rtl_addi(ddest, &pc, 4);
+        rtl_addi(regs0, &pc, id_src1->simm);
+        rtl_jr(regs0);
         HandleFTrace(decoder->dnpc);
     }
 

@@ -2,7 +2,6 @@
 #define __SIMULATOR_H__
 
 #include <riscv32/riscv32_cpu.h>
-#include <riscv32/riscv32_decode.h>
 
 class Simulator
 {
@@ -10,7 +9,7 @@ private:
     const char *imgFile;
 
 public:
-    std::shared_ptr<RISCV32_CPU> cpu;
+    std::shared_ptr<CPU> cpu;
     std::shared_ptr<NormalMemory> memory;
     std::shared_ptr<IOMemory> ioMem;
 

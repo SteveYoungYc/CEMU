@@ -105,8 +105,8 @@ void Simulator::SetStatus(CEMU_Status status, uint32_t haltPC, int32_t retVal)
 void signalHandler(int signal)
 {
     InfoPrint("CEMU crashed.\n");
-    simulator.cpu->decoder->itrace->Print();
-    simulator.cpu->decoder->ftrace->Print();
+    simulator.cpu->itrace->Print();
+    simulator.cpu->ftrace->Print();
     exit(0);
 }
 
@@ -115,7 +115,7 @@ SimStatus *GetStatus()
     return &simulator.simStatus;
 }
 
-shared_ptr<ICpu> GetCPU()
+shared_ptr<CPU> GetCPU()
 {
     return simulator.cpu;
 }
